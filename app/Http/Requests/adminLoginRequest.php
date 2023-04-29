@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+
 
 class adminLoginRequest extends FormRequest
 {
@@ -27,4 +30,13 @@ class adminLoginRequest extends FormRequest
             //
         ];
     }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = new JsonResponse([
+            'status' => 'validation error',
+            'errors' => $validator->errors()
+        ], 422);
+        throw new \Illuminate\Validation\ValidationException($validator, $response);
+    }
+
 }

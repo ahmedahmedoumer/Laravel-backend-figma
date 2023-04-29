@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\team_members;
 class updateUserProfileService{
 
-public function update( array $userData)
+public function updateUserProfile( array $userData)
     {
        $filename = Str::random(20) . '.' . $userData->file('image')->getClientOriginalExtension();
         $path = $request->file('image')->storeAs('public/images', $filename);

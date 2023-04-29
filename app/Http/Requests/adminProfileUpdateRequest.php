@@ -3,6 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
+
 
 class adminProfileUpdateRequest extends FormRequest
 {
@@ -22,16 +26,34 @@ class adminProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            $userId = $this->route('user_id'),
+            'id'=>'required|numeric',
             'firstName'=>'required|alpha|min:4|max:20',
-            'lastName'=>'required|alpha|min4:4|max:20',
-            'email'=>'required|email|unique:team_members,email',
-            'phone'=>'required|phone:+251',
+            'lastName'=>'required|alpha|min:4|max:20',
+            'email'=>[ 'required','email', Rule::unique('team_members','email')->ignore(1) ],
+            'phone'=>['required|phone:+251',Rule::unique('team_members','email')->ignore(1) ],
             'title'=>'required',
             'status'=>'required',
             'password'=>'required|min:8|max:50',
             'confirmPassword'=>'required|same:password',
-            'image' => 'required|image',
+            // 'image' => 'required|image' 
             //
         ];
     }
+    public function messages()
+    {
+        return [
+            'phone.phone' => 'The phone number must be a valid Ethiopian phone number.',
+        ];
+    }
+   
+ protected function failedValidation(Validator $validator)
+    {     
+        $response = new JsonResponse([
+            'status' => 'validation error',
+            'errors' => $validator->errors()
+        ], 422);
+        throw new \Illuminate\Validation\ValidationException($validator, $response);
+    }
+    
 }
