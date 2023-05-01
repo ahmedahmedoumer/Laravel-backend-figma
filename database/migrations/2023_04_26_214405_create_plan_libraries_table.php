@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('planPrompt')->nullable();
             $table->string('sourceFile')->nullable();
             $table->string('status')->nullable();
-            $table->foreign('planner_id')->references('id')->on('team_members');
+            $table->foreign('planner_id')->references('id')->on('users');
             $table->foreign('brands_id')->references('id')->on('brands');
             $table->timestamps();
         });

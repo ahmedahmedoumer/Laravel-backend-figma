@@ -1,6 +1,12 @@
 <?php
 
 namespace Database\Seeders;
+
+use App\Models\brands;
+use App\Models\brandsCompany;
+use App\Models\company;
+use App\Models\designLibrary;
+use App\Models\planLibrary;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,10 +21,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('team_members')->insert([
-            'firstName' => Str::random(10),
-            'email' => Str::random(10).'@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
+        // DB::table('users')->insert([
+        //     'firstName' => Str::random(10),
+        //     'email' => Str::random(10).'@gmail.com',
+        //     'password' => Hash::make('password'),
+        // ]);
+        // brands::factory(50)->create();//generate 50 rows of data for brands model;
+    //    brandsCompany::factory(50)->create(); //generate 50 rows of data for brandsCompany model;
+    //    planLibrary::factory(30)->create(); //generate 50 rows of data for planLibrary model;
+    //    designLibrary::factory(20)->create(); //generate 50 rows of data for designLibrary model;
+
+
     }
 }
