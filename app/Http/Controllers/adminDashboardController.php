@@ -11,14 +11,7 @@ use Illuminate\Http\Request;
 
 
 class adminDashboardController extends Controller
-{
-
-// public function __construct()
-// {
-
-//        $this->middleware('auth:sanctum');
-// }
-     
+{    
     public function adminDashboard()
     {
         $notificationReader = new notification();
@@ -36,6 +29,10 @@ class adminDashboardController extends Controller
          }
          $data="Failed to update check your entry data";
          return response()->json($data, 400);
+        }
+
+        public function fetchAllDashboardData(){
+           
         }
     
 }

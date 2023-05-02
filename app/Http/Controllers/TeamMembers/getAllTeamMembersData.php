@@ -17,8 +17,7 @@ class getAllTeamMembersData extends Controller
        return response()->json(['data',$allTeamMembers],200);
     }
 
-    public function addTeamMember(Request $request){
-        return $request->all();
+    public function addTeamMember(addTeamMemberRequest $request){
         $allRequestedData=$request->only('firstName','lastName','email','phone','title','status','password');
         $services=new UserProfileUpdateServices();
         $checkCreated=$services->registerTeamMember($allRequestedData);

@@ -9,5 +9,6 @@ class dashboardPageData extends Controller
 {
     public function fetchAllDashboardData(){
         
+
     }
 }
