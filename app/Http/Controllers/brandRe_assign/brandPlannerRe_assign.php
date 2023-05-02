@@ -4,8 +4,6 @@ namespace App\Http\Controllers\brandRe_assign;
 
 use App\Http\Controllers\Controller;
 use App\Models\brands;
-
-// use App\Http\Controllers\allUsers\getUsersController;
 use App\Models\User;
 use Illuminate\Http\Request;
 

@@ -13,7 +13,7 @@ class addTeamMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,7 +27,7 @@ class addTeamMemberRequest extends FormRequest
             'firstName'=>'required|alpha',
             'lastName'=>'required|alpha',
             'email'=>'required|email|unique:users,email',
-            'phone'=>'required|unique|numeric',
+            'phone'=>'required|unique:users,phone|numeric',
             'title'=>'required',
             'status'=>'required',
             'password'=>'required|min:8|max:50',

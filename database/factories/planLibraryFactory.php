@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\planLibrary;
+use App\Models\User;
+use App\Models\brands;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +20,12 @@ class planLibraryFactory extends Factory
      */
     public function definition(): array
     {
+        $user_id=User::where('title','planner')->pluck('id')->toArray();
+        $brand_id=brands::pluck('id')->toArray();
         return [
             //
-            'planner_id' => $this->faker->numberBetween(1, 3),
-            'brands_id' => $this->faker->unique()->numberBetween(1, 50),
+            'planner_id' => $this->faker->randomElement($user_id),
+            'brands_id' => $this->faker->randomElement($brand_id),
             'planTitle' => $this->faker->unique()->sentence(),
             'planDescription' => $this->faker->text(),
             'planPrompt' => $this->faker->text(),

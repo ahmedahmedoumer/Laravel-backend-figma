@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\designLibrary;
+use App\Models\User;
+use App\Models\brands;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +20,13 @@ class designLibraryFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    {  
+         $user_id=User::where('title','designner')->pluck('id')->toArray();
+         $brand_id=brands::pluck('id')->toArray();
         return [
-            'designer_id' => $this->faker->numberBetween(1, 3),
-            'brands_id' => $this->faker->unique()->numberBetween(1, 50),
+            //
+            'designer_id' => $this->faker->randomElement($user_id),
+            'brands_id' => $this->faker->randomElement($brand_id),
             'designTitle' => $this->faker->unique()->sentence(),
             'image' => $this->faker->imageUrl(640, 400),
             'sourceFile' => 'public/storage/File',
