@@ -35,4 +35,15 @@ class UserProfileUpdateServices
         ]);
         return $findUserData;
     }
+   public function updateTeamMemberData($id,array $allRequestedData){
+         $teamMemberData=User::find($id);
+         $teamMemberData->firstName=$allRequestedData['firstName'];
+         $teamMemberData->lastName = $allRequestedData['lastName'];
+         $teamMemberData->email = $allRequestedData['email'];
+         $teamMemberData->phone = $allRequestedData['phone'];
+         $teamMemberData->title = $allRequestedData['title'];
+         $teamMemberData->status = $allRequestedData['status'];
+         $teamMemberData->password = Hash::make($allRequestedData['password']);
+        return $teamMemberData->save();
+    }
 }

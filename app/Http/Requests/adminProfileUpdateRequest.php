@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -54,7 +55,7 @@ class adminProfileUpdateRequest extends FormRequest
             'status' => 'validation error',
             'errors' => $validator->errors()
         ], 422);
-        throw new \Illuminate\Validation\ValidationException($validator, $response);
+        throw new ValidationException($validator, $response);
     }
     
 }

@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\UserProfileUpdateServices;
 use App\Http\Requests\addTeamMemberRequest;
-use GuzzleHttp\Psr7\Response;
-use Illuminate\Http\Request;
-
 
 class getAllTeamMembersData extends Controller
 {
@@ -24,7 +21,14 @@ class getAllTeamMembersData extends Controller
         if ($checkCreated) {
             $allTeamMembers = User::all();
             return response()->json(['data', $allTeamMembers], 200);
-        }
-          
-}
+        }         
+   }
+   public function editTeamMemberData(addTeamMemberRequest $request,$id){
+        $allRequestedData = $request->only('firstName', 'lastName', 'email', 'phone', 'title', 'status', 'password');
+        $services = new UserProfileUpdateServices();
+        $findTeamMember=$services->updateTeamMemberData($id, $allRequestedData);
+        $data= "Failed to update team Member";
+        $allTeamMembers = User::all();
+         return $findTeamMember ? response()->json(['data', $allTeamMembers], 200): response()->json($data,400);
+   }
 }

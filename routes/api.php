@@ -42,9 +42,14 @@ Route::get('/all-users',[getUsersController::class,'getAllUsers'])->middleware('
 
 
 Route::get('/all-team-members',[getAllTeamMembersData::class, 'getAllTeamMember'])->middleware('auth:sanctum');
+Route::post('/team-members/add', [getAllTeamMembersData::class, 'addTeamMember'])->middleware('auth:sanctum');
+Route::post('/team-members/update/{id}', [getAllTeamMembersData::class, 'editTeamMemberData'])->middleware('auth:sanctum');
+
+
+
+
 Route::get('/get-all-plan-library',[getAllPlanLibrary::class, 'getAllListOfPlanLibray'])->middleware('auth:sanctum');
 Route::get('/users',[getUsersController::class, 'getAllUsers'])->middleware('auth:sanctum');
-
 
 
 Route::post('/users/planner/re-assigned/{brand_id}/{planner_id}',[brandPlannerRe_assign::class,'brandPlannerReassign'])->middleware('auth:sanctum');
@@ -52,7 +57,6 @@ Route::post('/users/designer/re-assigned/{brand_id}/{designer_id}', [brandDesign
 Route::post('/users/{id}/design-guide',[updateDesignGuide::class,'updateDesignGuide'])->middleware('auth:sanctum');
 
 
-Route::post('/team-members/add', [getAllTeamMembersData::class, 'addTeamMember'])->middleware('auth:sanctum');
 Route::get('/plan-library',[PlanLibraryController::class,'getAllPlanLibrary'])->middleware('auth:sanctum');
 Route::post('/add-plan',[PlanLibraryController::class,'addPlanLibrary'])->middleware('auth:sanctum');
 

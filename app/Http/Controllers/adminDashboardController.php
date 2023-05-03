@@ -32,7 +32,9 @@ class adminDashboardController extends Controller
         }
 
         public function fetchAllDashboardData(){
-           
+               $projects=
+               $tasks=
+               $notifications=
         }
     
 }

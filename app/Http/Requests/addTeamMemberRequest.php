@@ -5,6 +5,10 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
+use App\Models\User;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class addTeamMemberRequest extends FormRequest
 {
@@ -23,11 +27,14 @@ class addTeamMemberRequest extends FormRequest
      */
     public function rules(): array
     {
+      
+        $id=$this->route()->parameter('id');
+        $id= User::find($id) ?  User::find($id)->id : Str::random(5) ;
         return [
             'firstName'=>'required|alpha',
             'lastName'=>'required|alpha',
-            'email'=>'required|email|unique:users,email',
-            'phone'=>'required|unique:users,phone|numeric',
+            'email'=>['required','email',Rule::unique('users')->ignore($id)],
+            'phone'=>['required','numeric', Rule::unique('users')->ignore($id)],
             'title'=>'required',
             'status'=>'required',
             'password'=>'required|min:8|max:50',
@@ -43,11 +50,11 @@ class addTeamMemberRequest extends FormRequest
     }
         protected  function  failedValidation(Validator $validator)
         {
-       $response=new JsonResponse([
-            'status' => 'validation error',
-            'errors' => $validator->errors(),
-             ],422);
-        return throw  new \Illuminate\validation\ValidationException($validator,$response);
+              $response=new JsonResponse([
+                       'status' => 'validation error',
+                       'errors' => $validator->errors(),
+               ],422);
+        return throw  new ValidationException($validator,$response);
             
             }
 }

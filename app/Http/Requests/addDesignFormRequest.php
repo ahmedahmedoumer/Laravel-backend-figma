@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+
 class addDesignFormRequest extends FormRequest
 {
     /**
@@ -43,6 +45,6 @@ class addDesignFormRequest extends FormRequest
             'status' => 'validation error',
             'errors' => $validator->errors()
         ], 422);
-        throw new \Illuminate\Validation\ValidationException($validator, $response);
+        throw new ValidationException($validator, $response);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\notification;
 use App\Models\brands;
 use App\Models\User;
 use App\Models\brandsCompany;
@@ -32,7 +33,8 @@ class DatabaseSeeder extends Seeder
         // brands::factory(50)->create();//generate 50 rows of data for brands model;
     //    brandsCompany::factory(50)->create(); //generate 50 rows of data for brandsCompany model;
     //    planLibrary::factory(30)->create(); //generate 30 rows of data for planLibrary model;
-       designLibrary::factory(20)->create(); //generate 20 rows of data for designLibrary model;
+    //    designLibrary::factory(20)->create(); //generate 20 rows of data for designLibrary model;
+       notification::factory(10)->create();   //generate 10 rows of data for notification model;
 
 
     }
