@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('sourceFile')->nullable();
             $table->string('status')->nullable();
-            $table->foreign('designer_id')->references('id')->on('users');
-            $table->foreign('brands_id')->references('id')->on('brands');
+            $table->string('approved_by')->nullable();
+            $table->dateTime('approved_on')->nullable();
+            $table->foreign('designer_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('brands_id')->references('id')->on('brands')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

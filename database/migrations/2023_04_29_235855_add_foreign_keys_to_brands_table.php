@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::table('brands', function (Blueprint $table) {
             $table->unsignedBigInteger('planners_id')->nullable();
             $table->unsignedBigInteger('designers_id')->nullable();
-            $table->foreign('planners_id')->references('id')->on('users')->Delete('cascade');
-            $table->foreign('designers_id')->references('id')->on('users')->nDelete('cascade');
+            $table->foreign('planners_id')->references('id')->on('users')->oDelete('cascade');
+            $table->foreign('designers_id')->references('id')->on('users')->onDelete('cascade');
 
         });
     }

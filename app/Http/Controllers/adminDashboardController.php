@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\notification;
 use App\Services\UserProfileUpdateServices;
 use App\Models\User;
+use App\Models\designLibrary;
+use App\Models\planLibrary;
 use App\Http\Requests\adminProfileUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use DB;
 
 
 class adminDashboardController extends Controller
@@ -31,10 +34,19 @@ class adminDashboardController extends Controller
          return response()->json($data, 400);
         }
 
-        public function fetchAllDashboardData(){
-               $projects=
-               $tasks=
-               $notifications=
+    public function fetchAllDashboardData(){
+        $currentProjects=DB::table('task_progress_view')->get()->count();
+        $newProject=designLibrary::whereMonth('approved_on', now()->month)->get()->count();
+               $newTasks=planLibrary::where('status','!=',NULL)->get()->count();
+               $currentTasks=planLibrary::where('design_status','!=',"approved")->get()->count();
+               $notifications=notification::all();
+        return response()->json([
+            'current_projects'=>$currentProjects,
+            'newProject'=>$newProject,
+            'newTask'=>$newTasks,
+            'currentTask'=>$currentTasks,
+            'notification'=>$notifications
+             ],200);
         }
     
 }

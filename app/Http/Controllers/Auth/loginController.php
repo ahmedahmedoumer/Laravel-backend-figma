@@ -11,7 +11,7 @@ class loginController extends Controller
 {
     public function adminLogin(adminLoginRequest $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
             $user = Auth::user();
             $token = $user->createToken('api-token')->plainTextToken;
             return response()->json([
