@@ -8,23 +8,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+<<<<<<< HEAD:Pictures/upwork/project1/app/Models/user.php
 class User extends Authenticatable
+=======
+class brandsContactLinks extends Model
+>>>>>>> 6e0e1de5095e6c80ffded60a461bcdfe111b74bc:app/Models/brandsContactLinks.php
 {
     use HasApiTokens, HasFactory, Notifiable;
-     protected $table='users';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    public function brands()
-    {
-        return $this->hasMany(brands::class, 'planners_id')
-        ->orWhere('designers_id', $this->id);
-    }
-   
     protected $fillable = [
-        'firstName','lastName','email','phone','title','status','password'
+        'name',
+        'email',
+        'password',
     ];
 
     /**

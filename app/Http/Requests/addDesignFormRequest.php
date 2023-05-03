@@ -1,15 +1,12 @@
 <?php
 
 namespace App\Http\Requests;
-
-use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-
-
-class adminLoginRequest extends FormRequest
+class addDesignFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +24,19 @@ class adminLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=>'required|email',
-            'password'=>'required|min:8|max:50'
-            //
+            'designTitle'=>'required',
+            'image'=>'required|image',
+            'zipfile' => [
+                'required',
+                'file',
+                function ($attribute, $value, $fail) {
+                    $zip = new \ZipArchive();
+                    if ($zip->open($value) !== true) {
+                        $fail('Invalid zip file.');
+                    }
+                    $zip->close();
+                }
+            ],
         ];
     }
     protected function failedValidation(Validator $validator)
@@ -40,5 +47,4 @@ class adminLoginRequest extends FormRequest
         ], 422);
         throw new ValidationException($validator, $response);
     }
-
 }

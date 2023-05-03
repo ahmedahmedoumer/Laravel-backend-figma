@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('detail')->nullable();
             $table->string('status')->nullable();
-            $table->foreign('team_members_id')->references('id')->on('team_members');
+            $table->foreign('team_members_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

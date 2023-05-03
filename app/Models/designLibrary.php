@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class designLibrary extends Model
 {
     use HasFactory;
+    protected $fillable=['',''];
 }

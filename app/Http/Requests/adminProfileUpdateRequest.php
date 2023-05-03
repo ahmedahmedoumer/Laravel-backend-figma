@@ -5,6 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
+<<<<<<< HEAD
+=======
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+
+
+>>>>>>> 6e0e1de5095e6c80ffded60a461bcdfe111b74bc
 
 class adminProfileUpdateRequest extends FormRequest
 {
@@ -22,12 +30,19 @@ class adminProfileUpdateRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
-    {
+    {    
+        $userId=Auth::id();
         return [
+<<<<<<< HEAD
             'id'=>'required|numeric',
             'firstName'=>'required|alpha|min:4|max:20',
             'lastName'=>'required|alpha|min:4|max:20',
             'email'=>'required','email','unique:team_members,email',
+=======
+            'firstName'=>'required|alpha|min:4|max:20',
+            'lastName'=>'required|alpha|min:4|max:20',
+            'email'=>[ 'required','email', Rule::unique('users','email')->ignore($userId) ],
+>>>>>>> 6e0e1de5095e6c80ffded60a461bcdfe111b74bc
             'phone'=>'required|phone:+251',
             'title'=>'required',
             'status'=>'required',
@@ -50,7 +65,7 @@ class adminProfileUpdateRequest extends FormRequest
             'status' => 'validation error',
             'errors' => $validator->errors()
         ], 422);
-        throw new \Illuminate\Validation\ValidationException($validator, $response);
+        throw new ValidationException($validator, $response);
     }
     
 }

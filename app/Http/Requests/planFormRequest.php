@@ -6,10 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
-
-
-
-class adminLoginRequest extends FormRequest
+class planFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +24,9 @@ class adminLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=>'required|email',
-            'password'=>'required|min:8|max:50'
-            //
+            'planTitle'=>'required',
+            'planDescription'=>'required',
+            'planPrompt'=>'required'
         ];
     }
     protected function failedValidation(Validator $validator)
@@ -40,5 +37,4 @@ class adminLoginRequest extends FormRequest
         ], 422);
         throw new ValidationException($validator, $response);
     }
-
 }
