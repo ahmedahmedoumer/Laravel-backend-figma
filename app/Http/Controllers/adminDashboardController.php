@@ -7,10 +7,10 @@ use App\Services\UserProfileUpdateServices;
 use App\Models\User;
 use App\Models\designLibrary;
 use App\Models\planLibrary;
-use App\Http\Requests\adminProfileUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use DB;
+use App\http\Requests\adminProfileUpdateRequest;
+use Illuminate\Support\Facades\DB;
 
 
 class adminDashboardController extends Controller
