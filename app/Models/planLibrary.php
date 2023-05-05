@@ -11,8 +11,5 @@ class planLibrary extends Model
    protected $fillable=['plaTitle','planDescription','planPrompt'];
 
  
-   public function user()
-   {
-       return $this->belongsTo(User::class, 'brands_id', 'id');
-   }
+ 
 }

@@ -17,12 +17,17 @@ class adminDashboardController extends Controller
 {    
     public function adminDashboard()
     {
+        try {
         $notificationReader = new notification();
         $notificationReader = $notificationReader::where('status', 'notread')->get();
+        } catch (\Throwable $th) {
+            return response()->json(['error'=>$th],401);
+        }
     }
    
     public function adminProfileUpdateRequest(adminProfileUpdateRequest $request)
     {
+        try {
         $userData = $request->only(['firstName', 'lastName', 'email', 'phone', 'title', 'status',  'password', 'confirmPassword']);
         $updateUserProfile = new UserProfileUpdateServices();
         $header = $updateUserProfile->updateUserProfile($userData);
@@ -32,21 +37,27 @@ class adminDashboardController extends Controller
          }
          $data="Failed to update check your entry data";
          return response()->json($data, 400);
+        } catch (\Throwable $th) {
+            return response()->json(['error'=>$th],401);
         }
-
+        }
     public function fetchAllDashboardData(){
-        $currentProjects=DB::table('task_progress_view')->get()->count();
-        $newProject=designLibrary::whereMonth('approved_on', now()->month)->get()->count();
+        try {
+               $currentProjects=DB::table('task_progress_view')->get()->count();
+               $newProject=designLibrary::whereMonth('approved_on', now()->month)->get()->count();
                $newTasks=planLibrary::where('status','!=',NULL)->get()->count();
                $currentTasks=planLibrary::where('design_status','!=',"approved")->get()->count();
                $notifications=notification::all();
-        return response()->json([
-            'current_projects'=>$currentProjects,
-            'newProject'=>$newProject,
-            'newTask'=>$newTasks,
-            'currentTask'=>$currentTasks,
-            'notification'=>$notifications
-             ],200);
+            return response()->json([
+                  'current_projects'=>$currentProjects,
+                  'newProject'=>$newProject,
+                  'newTask'=>$newTasks,
+                  'currentTask'=>$currentTasks,
+                  'notification'=>$notifications
+                   ],200);
         }
-    
+        catch (\Throwable $th) {
+            return response()->json(['error'=>$th],401);
+        }
+    }
 }

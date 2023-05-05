@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('whatsapp')->nullable();
             $table->string('creationStatus')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('planners_id')->nullable();
+            $table->unsignedBigInteger('designers_id')->nullable();
+            $table->foreign('planners_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('designers_id')->references('id')->on('users')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

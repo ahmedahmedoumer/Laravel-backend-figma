@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\designLibrary;
 use App\Models\User;
 use App\Models\brands;
+use App\Models\planLibrary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

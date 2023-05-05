@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 class planFormRequest extends FormRequest
 {
@@ -29,7 +29,7 @@ class planFormRequest extends FormRequest
             'planPrompt'=>'required'
         ];
     }
-    protected function failedValidation(Validator $validator)
+  protected function failedValidation(Validator $validator)
     {
         $response = new JsonResponse([
             'status' => 'validation error',

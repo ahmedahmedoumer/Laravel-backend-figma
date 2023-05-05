@@ -22,5 +22,12 @@ class brands extends Model
     public function brandsCompany(){
         return $this->hasMany(brandsCompany::class,'brands_id');
     }
+    public function designLibrary(){
+        return $this->hasMany(designLibrary::class);
+    }
+    public function planLibrary()
+    {
+        return $this->hasMany(planLibrary::class);
+    }
    
 }

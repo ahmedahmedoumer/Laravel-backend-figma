@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class designLibrary extends Model
 {
     use HasFactory;
-    protected $fillable=['',''];
+    protected $fillable=['designTitle', 'image', 'sourceFile'];
+
+    public function brands()
+    {
+        return $this->belongsTo(brands::class, 'brands_id', 'id');
+    }
 }

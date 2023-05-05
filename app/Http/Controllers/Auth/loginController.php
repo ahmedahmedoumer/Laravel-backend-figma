@@ -11,7 +11,8 @@ class loginController extends Controller
 {
     public function adminLogin(adminLoginRequest $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
+        try {
+             if (Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
             $user = Auth::user();
             $token = $user->createToken('api-token')->plainTextToken;
             return response()->json([
@@ -23,14 +24,23 @@ class loginController extends Controller
                 'all_task' => 30000,
                 'new_task' => 250
             ]);
-        }
-        $data = "your credential are not match please try again !!";
-        return response()->json($data, 401);
+             }
+             $data = "your credential are not match please try again !!";
+             return response()->json($data, 401);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 401);
+        }  
     }
     public function logoutUser()
     {   
-        $user = Auth::guard('sanctum')->user();
-        $user->tokens()->delete();
-        return response()->json(['message' => "successfully Logged out !!"],200);
+        try{
+            $user = Auth::guard('sanctum')->user();
+            $user->tokens()->delete();
+            return response()->json(['message' => "successfully Logged out !!"], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 401);
+        }  
+
+      
     }
 }

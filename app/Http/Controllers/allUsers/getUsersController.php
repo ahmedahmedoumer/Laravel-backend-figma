@@ -9,10 +9,11 @@ class getUsersController extends Controller
 {
     //
     public function getAllUsers(){
-
-        // $allEmployeeData=brands::find(6)->company();
-        // $allEmployeeData=brands::all()->company;
-        $allEmployeeData = brands::with(['planner', 'designer','brandsCompany'])->get();
-        return response()->json(['AllUsers',$allEmployeeData],200);
+        try {
+            $allEmployeeData = brands::with(['planner', 'designer', 'brandsCompany'])->paginate(7);
+            return response()->json(['AllUsers', $allEmployeeData], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 401);
+        }    
     }
 }

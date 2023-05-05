@@ -29,8 +29,8 @@ class brandsFactory extends Factory
             'password' => Hash::make('password'),
             'phone' => $this->faker->phoneNumber(),
             'location' => $this->faker->text($maxNbChars = 10),
-            'title' => $this->faker->unique()->sentence(),
-            'creationStatus' => $this->faker->text(),
+            'title' => $this->faker->unique()->sentence($maxNbChars = 10),
+            'creationStatus' => $this->faker->text($maxNbChars = 6),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             'created_at' => now(),
@@ -41,9 +41,10 @@ class brandsFactory extends Factory
     }
     public function configure(){
         return $this->afterCreating(function (brands $brands) {
+            $userId = User::pluck('id');
             while($brands->planners_id==$brands->designers_id){
-                $brands->designers_id=$this->faker->unique()->numberBetween(1,50);
-                $project->save();
+                $brands->designers_id=$this->faker->randomElement($userId,null);
+                $brands->save();
             }
         });
     }
