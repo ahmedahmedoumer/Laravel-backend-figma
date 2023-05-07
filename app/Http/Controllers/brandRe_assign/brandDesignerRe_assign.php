@@ -14,9 +14,9 @@ class brandDesignerRe_assign extends Controller
     {
        try{
             $findBrandRow = brands::find($brand_id);
-            $findPlanner = User::where('id',$designer_id)->where('title', 'designer')->first();
-            if ($findBrandRow && $findPlanner) {
-            $findBrandRow->planners_id = $designer_id;
+            $findDesinner = User::where('id',$designer_id)->where('title', 'designner')->first();
+            if ($findBrandRow && $findDesinner) {
+            $findBrandRow->designers_id = $designer_id;
             $saveAssigning = $findBrandRow->save();
             if ($saveAssigning) {
                 $allEmployeeData = brands::with(['planner', 'designer', 'brandsCompany'])->get();

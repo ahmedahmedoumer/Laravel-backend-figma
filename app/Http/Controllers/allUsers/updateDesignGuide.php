@@ -15,6 +15,7 @@ class updateDesignGuide extends Controller
              $request->validate([
             'image'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
              ]);
+             return $request->image;
                 $image=$request->file('image')->store('public/images');
                 $findBrandRow=brands::find();
                 $findBrandRow->image=$image;

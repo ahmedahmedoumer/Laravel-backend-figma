@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class planLibrary extends Model
 {
     use HasFactory;
-   protected $fillable=['plaTitle','planDescription','planPrompt'];
+   protected $fillable=['planTitle','planDescription','planPrompt'];
 
  
  

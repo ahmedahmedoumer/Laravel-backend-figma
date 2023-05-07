@@ -7,7 +7,7 @@ use App\Models\notification;
 use App\Services\UserProfileUpdateServices;
 use App\Models\designLibrary;
 use App\Models\planLibrary;
-use App\http\Requests\adminProfileUpdateRequest;
+use App\Http\Requests\adminProfileUpdateRequest;
 use Illuminate\Support\Facades\DB;
 
 class adminDashboardController extends Controller
@@ -47,8 +47,8 @@ class adminDashboardController extends Controller
         $currentProjects = DB::table('task_progress_view')->get()->count();
         $newProject = designLibrary::whereMonth('approved_on', now()->month)->get()->count();
         $newTasks = planLibrary::where('status', '!=', NULL)->get()->count();
-        $currentTasks = planLibrary::where('design_status', '!=', "approved")->get()->count();
-        $notifications = notification::all();
+        $currentTasks = planLibrary::where('status', '!=', "approved")->get()->count();
+        $notifications = notification::where('status','notread');
         return response()->json([
             'current_projects' => $currentProjects,
             'newProject' => $newProject,

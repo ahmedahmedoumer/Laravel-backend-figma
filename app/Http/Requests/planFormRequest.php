@@ -23,6 +23,7 @@ class planFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        https://meet.google.com/qaz-edyq-ycx
         return [
             'planTitle'=>'required',
             'planDescription'=>'required',

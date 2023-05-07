@@ -30,12 +30,21 @@ class DesignLibraryController extends Controller
         try {
         $requestData=$request->only('designTitle','image','zipFile');
         $zipFileName=$request->file('zipFile');
-        $zipFile = Str::random(10).'-'.$zipFileName->getClientOriginalExtension();
-        $path = $zipFileName->storeAs('zip_files', $zipFile);
+        $imageFileName=$request->file('image');
+        $imageFileOriginalName= $imageFileName->getClientOriginalName();
+        $zipFileOriginalName = $zipFileName->getClientOriginalName();
+        $storepPathForZipFile = public_path() . '/uploads/zipFiles';
+        $storepPathForImageFile = public_path() . '/uploads/imageFiles';
+        $zipFileName->move($storepPathForZipFile, $zipFileOriginalName);
+        $imageFileName->move($storepPathForImageFile, $imageFileOriginalName);
+
+        $ZipFilestoreAs='/uploads/zipFiles/'. $zipFileOriginalName;
+        $ImageFilestoreAs = '/uploads/imageFiles/' . $imageFileOriginalName;
+
         $addDesignLibrary=designLibrary::create([
             'designTitle'=> $requestData['designTitle'],
-            'image'=> $requestData['image'],
-            'zipFile'=> $path,
+            'image'=> $ImageFilestoreAs,
+            'sourceFile'=> $ZipFilestoreAs,
            ]);
            return $addDesignLibrary ? response()->json($addDesignLibrary,201) : response()->json("Failed to add design !!", 400);
         } catch (\Throwable $th) {
@@ -45,7 +54,7 @@ class DesignLibraryController extends Controller
     public function updateDesignLibrary(Request $request,$id){
         try {
            $validator = Validator::make($request->all(), [
-            'zipFile'=>'required'
+                'sourceFile'=>'required|mimes:zip'
             ]);
            if ($validator->fails()) {
             $response = new JsonResponse([
@@ -55,15 +64,20 @@ class DesignLibraryController extends Controller
             throw new \Illuminate\Validation\ValidationException($validator, $response);
             }
             $findDesignPlan=designLibrary::find($id);
+            $check=null;
             if($findDesignPlan){
-            $zipFileName = $request->file('zipFile');
-            $zipFile = Str::random(10) . '-' . $zipFileName->getClientOriginalExtension();
-            $path = $zipFileName->storeAs('zip_files', $zipFile);
+            $file=$request->sourceFile;
+            $zipFileName = $file->getClientOriginalName();
+            $storepPathForZipFile = public_path() . '/uploads/zipFiles';
+
+            $file->move($storepPathForZipFile, $zipFileName);
+            $path ='/uploads/zipFiles/'.$zipFileName;
+
             $findDesignPlan->sourceFile=$path;
-            $findDesignPlan->save();
+            $check=$findDesignPlan->save();
             }
             $allDesignLibrary = designLibrary::all();
-            return $allDesignLibrary ? response()->json($allDesignLibrary, 200) : response()->json("Empty Design Library", 400);
+            return $allDesignLibrary && $check ? response()->json(["message"=>"successfully updated",'data'=>$allDesignLibrary], 200) : response()->json("Empty Design Library", 400);
         } catch (\Throwable $th) {
           return response()->json(['error'=>$th],401);
         }

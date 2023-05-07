@@ -12,17 +12,13 @@ class loginController extends Controller
     public function adminLogin(adminLoginRequest $request)
     {
         try {
-             if (Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
+             if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'title'=>"admin",'status'=>"Active" ])) {
             $user = Auth::user();
             $token = $user->createToken('api-token')->plainTextToken;
             return response()->json([
                 'user' => $user,
                 'status' => 200,
-                'token' => $token,
-                'current_project' => 30000,
-                'new_projects' => 250,
-                'all_task' => 30000,
-                'new_task' => 250
+                'token' => $token
             ]);
              }
              $data = "your credential are not match please try again !!";

@@ -25,8 +25,8 @@ class addDesignFormRequest extends FormRequest
     {
         return [
             'designTitle'=>'required',
-            'image'=>'required|image',
-            'zipfile' => [
+            'image'=>'required|image ',
+            'zipFile' => [
                 'required',
                 'file',
                 function ($attribute, $value, $fail) {

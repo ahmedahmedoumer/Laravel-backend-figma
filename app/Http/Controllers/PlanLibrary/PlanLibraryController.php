@@ -36,7 +36,7 @@ class PlanLibraryController extends Controller
         'planTitle'=> $planRequest['planTitle'],
         'planDescription'=> $planRequest['planDescription'],
         'planPrompt'=> $planRequest['planPrompt']]);
-       return $createPlan ? response()->json(planLibrary::paginate(4), 200) : response()->json('Failed to register plan ', 400);
+       return $createPlan ? response()->json(planLibrary::all(), 200) : response()->json('Failed to register plan ', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
@@ -73,20 +73,37 @@ public function addbulkPlan(Request $request){
     public function planApprove($id){
         try {
          DB::beginTransaction();
-        $findPLanLibrary = planLibrary::findOrFail($id);
-         $findPLanLibrary->status="Approve";
-        $findPLanLibrary->approved_on = now();
-        $findPLanLibrary->approved_by = Auth::id();
-         $findPLanLibrary->save();
-         $findBrands=User::findOrFail($findPLanLibrary->brands_id);
-         $findBrands->planners_id=$findPLanLibrary->planner_id;
-         $check= $findBrands->save();
+          $findPLanLibrary = planLibrary::findOrFail($id);
+          $findPLanLibrary->status="Approve";
+          $findPLanLibrary->approved_on = now();
+          $findPLanLibrary->approved_by = Auth::id();
+          $findPLanLibrary->save();
+          $findBrands=User::findOrFail($findPLanLibrary->brands_id);
+          $findBrands->planners_id=$findPLanLibrary->planner_id;
+          $check= $findBrands->save();
          if(!$check){
            DB::rollBack();
            return response()->json('Failed to register plan ', 400);
          }
          DB::commit();
-        return response()->json(planLibrary::paginate(4), 200);
+        return response()->json(['message'=>"Successfully Approved plan ",planLibrary::paginate(4)], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 401);
+        }
+    }
+    public function updatePlanLibrary(planFormRequest $request, $id){
+
+        try {
+            $planRequest = $request->only('planTitle', 'planDescription', 'planPrompt');
+            $findPlan=planLibrary::findOrFail($id);
+            $chec=null;
+            if($findPlan){
+                  $findPlan->planTitle=$planRequest['planTitle'];
+                  $findPlan->planDescription=$planRequest['planDescription'];
+                  $findPlan->planPrompt=$planRequest['planPrompt'];
+                  $check=$findPlan->save();
+            }
+            return $check ? response()->json(planLibrary::all(), 200) : response()->json('Failed to update plan ', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
