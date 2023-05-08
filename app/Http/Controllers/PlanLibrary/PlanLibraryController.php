@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\PlanLibrary;
 
-use Maatwebsite\Excel\Facades\Excel;
+// use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\planFormRequest;
 use App\Models\planLibrary;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\brands;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Concerns\ToArray;
+use League\Csv\Reader;
+use League\Csv\Statement;
+// use Maatwebsite\Excel\Concerns\ToArray;
 
 class PlanLibraryController extends Controller
 {
@@ -43,8 +46,10 @@ class PlanLibraryController extends Controller
 }
 public function deletePlan($id){
         try {
-       $planLibrary=planLibrary::find($id);
-       $checkDelete=$planLibrary->delete();
+       $planLibrary=planLibrary::findOrFail($id);
+       $findBrandsById=brands::findOrFail($planLibrary->brands_id);
+       $findBrandsById->planners_id=NULL;
+       $checkDelete=$planLibrary->delete()  &&  $findBrandsById->save();
       return $checkDelete ? response()->json(['Deleted successfully'],200) : response()->json(['Deleted successfully'],400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
@@ -52,20 +57,28 @@ public function deletePlan($id){
 }
 public function addbulkPlan(Request $request){
         try {
-    $request->validate([
+       $request->validate([
         'zipFile'=> 'required|mimes:xlsx,xls,csv'
         ]);
-        $path=$request->file('zipFile');
-        $data = Excel::toArray(new ToArray(), $path);
-        foreach ($data[0] as $row) {
-           $validatedRow = Validator::make($row, [
-                'planTitle' => 'required',
-                'planDescription' =>'required',
-                'planPrompt' => 'required',
-         ])->validate();
+        $csvFile= Reader::createFromPath($request->file('zipFile')->getRealPath());
+        $csvFile->setHeaderOffset(0);
+       
+        foreach ($csvFile as $row) {
+            $validator = Validator::make($row, [
+                 'planTitle' => 'required',
+                 'planDescription' =>'required',
+                 'planPrompt' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+            $planLibrary=new planLibrary();
+            $planLibrary->planTitle=$row['planTitle'];
+            $planLibrary->planDescription=$row['planDescription'];
+            $planLibrary->planPrompt=$row['planPrompt'];
+            $checkCreated=$planLibrary->save();
         }
-           $checkCreated= planLibrary::create($validatedRow);
-           return $checkCreated ? response()->json('Successefully created',200): response()->json('Successefully created', 400);
+           return $checkCreated ? response()->json('Successefully created',200): response()->json('Failed to Add bulk plan', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
@@ -78,16 +91,17 @@ public function addbulkPlan(Request $request){
           $findPLanLibrary->approved_on = now();
           $findPLanLibrary->approved_by = Auth::id();
           $findPLanLibrary->save();
-          $findBrands=User::findOrFail($findPLanLibrary->brands_id);
+          $findBrands=brands::findOrFail($findPLanLibrary->brands_id);
           $findBrands->planners_id=$findPLanLibrary->planner_id;
           $check= $findBrands->save();
          if(!$check){
            DB::rollBack();
            return response()->json('Failed to register plan ', 400);
-         }
+          }
          DB::commit();
-        return response()->json(['message'=>"Successfully Approved plan ",planLibrary::paginate(4)], 200);
+        return response()->json(['message'=>"Successfully Approved plan ", planLibrary::paginate(4)], 200);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return response()->json(['error' => $th], 401);
         }
     }

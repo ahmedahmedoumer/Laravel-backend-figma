@@ -35,6 +35,7 @@ use App\Http\Controllers\allTask\getAllTaskController;
 
 //all login and dashbord page end points are here
 Route::post('/login', [loginController::class, 'adminLogin']);
+
 Route::group(['middleware','auth:sanctum'],function(){
 
 Route::post('/update-profile',[adminDashboardController::class, 'adminProfileUpdateRequest']);
@@ -58,7 +59,7 @@ Route::post('/plan-library/update-plan/{id}', [PlanLibraryController::class, 'up
 Route::post('/add-plan', [PlanLibraryController::class, 'addPlanLibrary']);
 
 Route::get('/get-all-plan-library', [getAllPlanLibrary::class, 'getAllListOfPlanLibray']);
-Route::post('/reports/delete-plan/{id}',[PlanLibraryController::class ,'deletePlan']);
+Route::post('/delete-plan/{id}',[PlanLibraryController::class ,'deletePlan']);
 Route::post('/add-bulk-plan',[PlanLibraryController::class,'addbulkPlan']);
 Route::post('/plan/approve/{id}',[PlanLibraryController::class,'planApprove']);
 
@@ -79,8 +80,10 @@ Route::post('/update-design/{id}',[DesignLibraryController::class,'updateDesignL
 
 // all all tasks and reports page api's are here
 Route::post('/all-tasks/delete-design-request/{id}', [DesignLibraryController::class, 'deleteDesignRequest']);
+Route::post('all-tasks/add-bulk-design',[DesignLibraryController::class,'addbulkDesign']);
+
 Route::post('/all-tasks/approve-design-request/{id}', [DesignLibraryController::class, 'approveDesignRequest']);
-Route::post('/all-tasks/request-design-for-need-edit/{id}', [DesignLibraryController::class, 'setStatusNeedEditForDesignRequest']);
+Route::post('/all-tasks/request-design-for-need-edit', [DesignLibraryController::class, 'setStatusNeedEditForDesignRequest']);
 
 Route::get('/all-tasks',[getAllTaskController::class,'getAllTask']);
 Route::get('/reports',[getAllTaskController::class,'getReports']);

@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\designLibrary;
 
 use App\Http\Controllers\Controller;
-use Maatwebsite\Excel\Facades\Excel;
+// use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Models\designLibrary;
 use Illuminate\Support\Str;
+use App\Models\brands;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\addDesignFormRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use Maatwebsite\Excel\Concerns\ToArray;
+use App\Http\Requests\planFormRequest;
+use App\Models\planLibrary;
+use Illuminate\Support\Facades\Auth;
+use League\Csv\Reader;
+use League\Csv\Statement;
+// use Maatwebsite\Excel\Concerns\ToArray;
 
 
 class DesignLibraryController extends Controller
@@ -83,28 +89,32 @@ class DesignLibraryController extends Controller
         }
     }
     public function deleteDesignRequest($id){
+
         try {
-             $findDesignRequest=designLibrary::findOrFail($id);
-             $checkDelete=$findDesignRequest->delete();
-             $allDesignLibrary = designLibrary::all();
-             return ($checkDelete && $allDesignLibrary) ? response()->json($allDesignLibrary, 200) : response()->json("Empty Design Library", 400);
-        } catch (\Throwable $th) {
-            return response()->json(['error'=>$th],401);
-        }
+            DB::transaction(function () {
+            $designLibrary=designLibrary::findOrFail($id);
+            $findBrandsById=brands::findOrFail($designLibrary->brands_id);
+            $findBrandsById->designers_id=NULL;
+            $checkDelete=$designLibrary->delete()  &&  $findBrandsById->save();
+           return $checkDelete ? response()->json(['Deleted successfully'],200) : response()->json(['failed to Delete successfully'],400);
+          });
+             } catch (\Throwable $th) {
+                 return response()->json(['error' => $th], 401);
+             }
     }
     public function approveDesignRequest($id){
         try {
-             DB::beginTransaction();
+            DB::beginTransaction();  
              $findDesignLibrary = designLibrary::findOrFail($id);
              $findDesignLibrary->status = "Approve";
-             $findDesignLibrary->save();
-             $findBrands = User::findOrFail($findDesignLibrary->brands_id);
+             if($findDesignLibrary->save()){
+             $findBrands = brands::findOrFail($findDesignLibrary->brands_id);
              $findBrands->designers_id = $findDesignLibrary->designer_id;
-            $check = $findBrands->save();
+             $check = $findBrands->save();
             if (!$check) {
-            DB::rollBack();
+                DB::rollback();
             return response()->json('Failed to register plan ', 400);
-            }
+            }}
             DB::commit();
             return response()->json(designLibrary::paginate(4), 200);
         } catch (\Throwable $th) {
@@ -112,10 +122,10 @@ class DesignLibraryController extends Controller
         }
     }
     public function setStatusNeedEditForDesignRequest(Request $request){
-           $data=$request->data;
+        $id=$request->data;
            try {
-            foreach ($data as $key) {
-                $designItem = designLibrary::findOrFail($key->id);
+            foreach ($id as $key => $value) {
+                $designItem = designLibrary::find($value);
                 $designItem->status = "Need Edit";
                 $designItem->save();
             }
@@ -126,21 +136,30 @@ class DesignLibraryController extends Controller
     }
     public function addbulkDesign(Request $request)
     {
-       try {
-           $request->validate([
-              'zipFile' => 'required|mimes:xlsx,xls,csv'
+        try {
+        $request->validate([
+         'zipFile' => 'required',
+        ]);
+        $csvFile= Reader::createFromPath($request->file('zipFile')->getRealPath());
+        $csvFile->setHeaderOffset(0);
+       
+        foreach ($csvFile as $row) {
+            $validator = Validator::make($row, [
+                 'designTitle' => 'required',
             ]);
-            $path = $request->file('zipFile');
-            $data = Excel::toArray(new ToArray(), $path);
-            foreach ($data[0] as $row) {
-                $validatedRow = Validator::make($row, [
-                   'designTitle' => 'required', 
-                ])->validate();
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
             }
-           $checkCreated = designLibrary::create($validatedRow);
-           return $checkCreated ? response()->json('Successefully created', 200) : response()->json('Successefully created', 400);
+            $designLibrary=new designLibrary();
+            $designLibrary->designTitle=$row['designTitle'];
+            $checkCreated=$designLibrary->save();
+        }
+           return $checkCreated ? response()->json('Successefully created',200): response()->json('Failed to Add bulk design', 400);
+           
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
     }
+
+    
 }
