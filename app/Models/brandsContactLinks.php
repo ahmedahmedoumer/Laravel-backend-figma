@@ -7,12 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-<<<<<<< HEAD:Pictures/upwork/project1/app/Models/user.php
-class User extends Authenticatable
-=======
 class brandsContactLinks extends Model
->>>>>>> 6e0e1de5095e6c80ffded60a461bcdfe111b74bc:app/Models/brandsContactLinks.php
 {
     use HasApiTokens, HasFactory, Notifiable;
 
