@@ -20,7 +20,7 @@ class brands extends Model
         return $this->belongsTo(User::class, 'designers_id');
     }
     public function brandsCompany(){
-        return $this->hasMany(brandsCompany::class,'brands_id');
+        return $this->hasOne(brandsCompany::class,'brands_id');
     }
     public function designs(){
         return $this->hasMany(designs::class);

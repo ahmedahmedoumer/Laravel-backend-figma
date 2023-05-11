@@ -20,7 +20,7 @@ class notificationFactory extends Factory
         $user_id=User::pluck('id')->toArray();
         return [
             //
-            'team_members_id'=>$this->faker->randomElement($user_id),
+            'users_id'=>$this->faker->randomElement($user_id),
             'title'=>$this->faker->unique->text(),
             'detail'=>$this->faker->unique->text(),
             'status'=>$this->faker->randomElement(['new','seen']),

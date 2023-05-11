@@ -55,12 +55,13 @@ Route::post('/team-members/update/{id}', [getAllTeamMembersData::class, 'editTea
 //all plan category api's are here
 Route::get('/plan-library', [PlanLibraryController::class, 'getAllPlanLibrary'])->middleware('auth:sanctum');
 Route::post('/plan-library/update-plan/{id}', [PlanLibraryController::class, 'updatePlanLibrary'])->middleware('auth:sanctum');
-Route::post('/add-plan', [PlanLibraryController::class, 'addPlanLibrary'])->middleware('auth:sanctum');
-
+Route::post('/add-planLibrary', [PlanLibraryController::class, 'addPlanLibrary'])->middleware('auth:sanctum');
+Route::post('/add-plan', [PlanLibraryController::class, 'addPlan'])->middleware('auth:sanctum');
 Route::get('/get-all-plan-library', [getAllPlanLibrary::class, 'getAllListOfPlanLibray'])->middleware('auth:sanctum');
 Route::post('/delete-plan/{id}',[PlanLibraryController::class ,'deletePlan'])->middleware('auth:sanctum');
 Route::post('/add-bulk-plan',[PlanLibraryController::class,'addbulkPlan'])->middleware('auth:sanctum');
 Route::post('/plan/approve/{id}',[PlanLibraryController::class,'planApprove'])->middleware('auth:sanctum');
+Route::post('/all-tasks/request-plan-for-need-edit/{id}',[PlanLibraryController::class, 'setStatusNeedEditForPlanRequest'])->middleware('auth:sanctum');
 
 
 
@@ -82,7 +83,7 @@ Route::post('/all-tasks/delete-design-request/{id}', [DesignLibraryController::c
 Route::post('all-tasks/add-bulk-design',[DesignLibraryController::class,'addbulkDesign'])->middleware('auth:sanctum');
 
 Route::post('/all-tasks/approve-design-request/{id}', [DesignLibraryController::class, 'approveDesignRequest'])->middleware('auth:sanctum');
-Route::post('/all-tasks/request-design-for-need-edit', [DesignLibraryController::class, 'setStatusNeedEditForDesignRequest'])->middleware('auth:sanctum');
+Route::post('/all-tasks/request-design-for-need-edit/{id}', [DesignLibraryController::class, 'setStatusNeedEditForDesignRequest'])->middleware('auth:sanctum');
 
 Route::get('/all-tasks',[getAllTaskController::class,'getAllTask'])->middleware('auth:sanctum');
 Route::get('/reports',[getAllTaskController::class,'getReports'])->middleware('auth:sanctum');

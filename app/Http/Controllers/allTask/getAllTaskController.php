@@ -13,7 +13,9 @@ class getAllTaskController extends Controller
     //
     public function getAllTask(){
      try {
-        $fetchAllTask=brands::with('designs','brandsCompany')->get();
+        $fetchAllTask=brands::with('brandsCompany','plans','designs')->whereHas('plans',function($query){
+            $query->where('status','Approved');
+        })->get();
         return response()->json($fetchAllTask, 200);
         } catch (\Throwable $th) {
             return response()->json(['error'=>$th], 401);
@@ -21,7 +23,9 @@ class getAllTaskController extends Controller
     }
     public function getReports(){
         try {
-              $fetchTheDesignnerAndPlannerOfUser = brands::with('brandsCompany', 'designLibrary', 'planLibrary')->get();
+              $fetchTheDesignnerAndPlannerOfUser = brands::with('brandsCompany', 'designs', 'plans')->whereHas('plans',function($query){
+                $query->where('status','Approved');
+              })->get();
               return response()->json($fetchTheDesignnerAndPlannerOfUser, 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);

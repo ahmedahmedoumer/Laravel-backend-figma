@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('planTitle')->nullable();
             $table->longText('planDescription')->nullable();
             $table->longText('planPrompt')->nullable();
-            $table->string('sourceFile')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

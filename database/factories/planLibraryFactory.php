@@ -24,7 +24,6 @@ class planLibraryFactory extends Factory
             'planTitle' => $this->faker->unique()->sentence(),
             'planDescription' => $this->faker->text(),
             'planPrompt' => $this->faker->text(),
-            'sourceFile' => 'public/storage/File',
             'status' => $this->faker->randomElement(['approved', 'pending', 'not active', 'needEdit']),
             'created_at' => now(),
             'updated_at' => now()

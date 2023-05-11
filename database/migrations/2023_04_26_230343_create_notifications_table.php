@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_members_id')->nullable();
+            $table->unsignedBigInteger('users_id')->nullable();
             $table->string('title')->nullable();
             $table->string('detail')->nullable();
             $table->string('status')->nullable();
-            $table->foreign('team_members_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\searchTerm;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\brands;
+use App\Models\brandsCompany;
 use App\Models\designLibrary;
 use App\Models\planLibrary;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+
 class searchTermController extends Controller
 {
     public function searchFromAllUsers(Request $request){
@@ -97,9 +99,7 @@ class searchTermController extends Controller
         if ($request->filled('search')) {
             $searchQuery = $request->input('search');
             $allDesignLibraries->where(function ($query) use ($searchQuery) {
-                $query->where('designTitle', 'LIKE', '%' . $searchQuery . '%')
-                ->orWhere('brands_id','LIKE', '%' . $searchQuery . '%')
-                ->orWhere('designer_id', 'LIKE', '%' . $searchQuery . '%');
+                $query->where('designTitle', 'LIKE', '%' . $searchQuery . '%');
             });
         }
             $allDesignLibraries = $allDesignLibraries->orderBy('id','ASC')->paginate(6);
@@ -107,7 +107,6 @@ class searchTermController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
-
     }
     public function searchFromPlanLibraries(Request $request)
     {
@@ -121,9 +120,7 @@ class searchTermController extends Controller
             $allPlanLibraries->where(function ($query) use ($searchQuery) {
                 $query->where('planTitle', 'LIKE', '%' . $searchQuery . '%')
                 ->orWhere('planDescription', 'LIKE', '%' . $searchQuery . '%')
-                ->orWhere('planPrompt', 'LIKE', '%' . $searchQuery . '%')
-                ->orWhere('brands_id','LIKE', '%' . $searchQuery . '%')
-                ->orWhere('planner_id','LIKE', '%' . $searchQuery . '%');
+                ->orWhere('planPrompt', 'LIKE', '%' . $searchQuery . '%');
             });
         }
         $allPlanLibraries = $allPlanLibraries->orderBy('id','ASC')->paginate(6);
@@ -135,20 +132,51 @@ class searchTermController extends Controller
     public function searchFromAllTasks(Request $request)
     {
         try {
-        $getAllTasks= DB::table('task_progress_view');
+            $getAllTasks = brands::with('brandCompany','designs', 'plans')->whereHas('plans',function($query){
+                $query->where('status','Approved');
+            });
+            if($request->filled('filter')){
+               $getAllTasks=$getAllTasks->where('creationStatus',$request->filter);
+            }
+            if ($request->filled('search')) {
+                $searchQuery=$request->search;
+                $getAllTasks=$getAllTasks->where(function ($query) use ($searchQuery){
+                     $query->where('firstName','LIKE','%'.$searchQuery.'%')
+                     ->orWhere('creationStatus','LIKE','%'.$searchQuery.'%')
+                     ->orWhere('brandsCompany', function ($find) {
+                            $find->where('companyName', 'LIKE', '%'.$searchQuery.'%');
+                        });
+                     });
+                }
            return response()->json($getAllTasks->paginate(6));
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
     }
     public function searchFromReports(Request $request)
-    {   
-      try{
-        $getAllTasks = DB::table('task_progress_view');
-        return response()->json($getAllTasks->paginate(6));
+    {
+
+        $getAllReports = brands::with('brandsCompany', 'designs', 'plans');
+        try {
+        if ($request->filled('filters')) {
+                $getAllReports=$getAllReports->where('creationStatus',$request->filter);
+        }
+        if ($request->filled('search')) 
+        {
+            $searchQuery=$request->input('search');
+            $getAllReports->where(function ($query) use ($searchQuery){
+                $query->where('firstName','LIKE','%'.$searchQuery.'%')
+                ->orWhere('creationStatus', 'LIKE', '%' . $searchQuery . '%');
+            });
+        }
+           return response()->json($getAllReports->paginate(6));
          } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
 
     }
 }
+
+
+
+  
