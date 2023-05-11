@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class designs extends Model
 {
     use HasFactory;
+    protected $fillable=['textOnPost'];
 }

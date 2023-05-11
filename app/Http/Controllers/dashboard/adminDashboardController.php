@@ -47,10 +47,10 @@ class adminDashboardController extends Controller
     public function fetchAllDashboardData()
     {
         try{
-        $currentProjects = DB::table('task_progress_view')->get()->count();
-        $newProject = designLibrary::whereMonth('approved_on', now()->month)->get()->count();
-        $newTasks = planLibrary::where('status', '!=', NULL)->get()->count();
-        $currentTasks = planLibrary::where('status', '!=', "approved")->get()->count();
+        $currentProjects = DB::table('task_progress_view')->where('design_status','approved')->get()->count();
+        $newProject = DB::table('task_progress_view')->where('design_status','approved')->whereMonth('design_approved_on', now()->month)->get()->count();
+        $newTasks = DB::table('task_progress_view')->whereMonth('design_approved_on', now()->month)->get()->count();
+        $currentTasks =DB::table('task_progress_view')->where('plan_status', "approved")->get()->count();
         $notifications = notification::where('status','notread');
         return response()->json([
             'current_projects' => $currentProjects,

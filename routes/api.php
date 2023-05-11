@@ -38,7 +38,7 @@ Route::post('/login', [loginController::class, 'adminLogin']);
 
 
 Route::post('/update-profile',[adminDashboardController::class, 'adminProfileUpdateRequest'])->middleware('auth:sanctum');
-Route::get('/dashboard',[adminDashboardController::class,'fetchAllDashboardData'])->middleware('auth:sanctum')->middleware('auth:sanctum');;
+Route::get('/dashboard',[adminDashboardController::class,'fetchAllDashboardData'])->middleware('auth:sanctum')->middleware('auth:sanctum');
 
 
 

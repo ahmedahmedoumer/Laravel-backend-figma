@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_id');
-            $table->unsignedBigInteger('brands_id');
-            $table->string('textOnPost');
-            $table->string('caption');
-            $table->string('hashTag');
-            $table->string('users_id');
-            $table->string('brands_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->unsignedBigInteger('brands_id')->nullable();
+            $table->unsignedBigInteger('planner')->nullable();
+            $table->longText('textOnPost')->nullable();
+            $table->longText('caption')->nullable();
+            $table->longText('hashTag')->nullable();
+            $table->string('status')->nullable();
+            $table->string('approved_by')->nullable();
+            $table->string('approved_on')->nullable();
+            $table->foreign('planner')->references('id')->on('users');
             $table->foreign('brands_id')->references('id')->on('brands');
-
             $table->timestamps();
         });
     }

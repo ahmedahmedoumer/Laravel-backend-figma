@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('brands_companies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('brands_id');
-            $table->string('companyName');
-            $table->string('companyWebsite');
-            $table->string('companyNumber');
-            $table->string('companyDescription');
+            $table->unsignedBigInteger('brands_id')->nullable();
+            $table->string('companyName')->nullable();
+            $table->string('companyWebsite')->nullable();
+            $table->string('companyNumber')->nullable();
+            $table->string('companyDescription')->nullable();
             $table->foreign('brands_id')->references('id')->on('brands')->onDelete('cascade');
             $table->timestamps();
         });

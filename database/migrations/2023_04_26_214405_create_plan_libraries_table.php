@@ -13,17 +13,11 @@ return new class extends Migration
     {
         Schema::create('plan_libraries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('planner_id')->nullable();
-            $table->unsignedBigInteger('brands_id')->nullable();
             $table->string('planTitle')->nullable();
-            $table->string('planDescription')->nullable();
-            $table->string('planPrompt')->nullable();
+            $table->longText('planDescription')->nullable();
+            $table->longText('planPrompt')->nullable();
             $table->string('sourceFile')->nullable();
             $table->string('status')->nullable();
-            $table->string('approved_by')->nullable();
-            $table->dateTime('approved_on')->nullable();
-            $table->foreign('planner_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('brands_id')->references('id')->on('brands')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

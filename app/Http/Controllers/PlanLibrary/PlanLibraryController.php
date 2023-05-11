@@ -32,8 +32,10 @@ class PlanLibraryController extends Controller
         }
     }
 
-    public function addPlanLibrary(planFormRequest $request){
+    public function addPlanLibrary(plansFormRequest $request){
         try {
+
+            dd('hello');
       $planRequest=$request->only('planTitle','planDescription','planPrompt');
       $createPlan=planLibrary::create([
         'planTitle'=> $planRequest['planTitle'],

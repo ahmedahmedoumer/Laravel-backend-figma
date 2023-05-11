@@ -20,12 +20,7 @@ class planLibraryFactory extends Factory
      */
     public function definition(): array
     {
-        $user_id=User::where('title','planner')->pluck('id')->toArray();
-        $brand_id=brands::pluck('id')->toArray();
         return [
-            //
-            'planner_id' => $this->faker->randomElement($user_id),
-            'brands_id' => $this->faker->randomElement($brand_id),
             'planTitle' => $this->faker->unique()->sentence(),
             'planDescription' => $this->faker->text(),
             'planPrompt' => $this->faker->text(),

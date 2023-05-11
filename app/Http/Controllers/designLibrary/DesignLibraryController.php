@@ -34,8 +34,8 @@ class DesignLibraryController extends Controller
     }
     public function addDesignLibrary(addDesignFormRequest $request){
         try {
-        $requestData=$request->only('designTitle','image','zipFile');
-        $zipFileName=$request->file('zipFile');
+        $requestData=$request->only('designTitle','image','sourceFile');
+        $zipFileName=$request->file('sourceFile');
         $imageFileName=$request->file('image');
         $imageFileOriginalName= $imageFileName->getClientOriginalName();
         $zipFileOriginalName = $zipFileName->getClientOriginalName();
@@ -57,33 +57,33 @@ class DesignLibraryController extends Controller
             return response()->json(['error'=>$th],401);
         }
     }
-    public function updateDesignLibrary(Request $request,$id){
+    public function updateDesignLibrary(addDesignFormRequest $request,$id){
         try {
-           $validator = Validator::make($request->all(), [
-                'sourceFile'=>'required|mimes:zip'
-            ]);
-           if ($validator->fails()) {
-            $response = new JsonResponse([
-                'status' => 'validation error',
-                'errors' => $validator->errors()
-            ], 422);
-            throw new \Illuminate\Validation\ValidationException($validator, $response);
-            }
+            $requestData=$request->only('designTitle','image','sourceFile');
+            $zipFileName=$request->file('sourceFile');
+            $imageFileName=$request->file('image');
+            $imageFileOriginalName= $imageFileName->getClientOriginalName();
+            $zipFileOriginalName = $zipFileName->getClientOriginalName();
+            $storepPathForZipFile = public_path() . '/uploads/zipFiles';
+            $storepPathForImageFile = public_path() . '/uploads/imageFiles';
+            $zipFileName->move($storepPathForZipFile, $zipFileOriginalName);
+            $imageFileName->move($storepPathForImageFile, $imageFileOriginalName);
+    
+            $ZipFilestoreAs='/uploads/zipFiles/'. $zipFileOriginalName;
+            $ImageFilestoreAs = '/uploads/imageFiles/' . $imageFileOriginalName;
+
             $findDesignPlan=designLibrary::find($id);
             $check=null;
             if($findDesignPlan){
-            $file=$request->sourceFile;
-            $zipFileName = $file->getClientOriginalName();
-            $storepPathForZipFile = public_path() . '/uploads/zipFiles';
-
-            $file->move($storepPathForZipFile, $zipFileName);
-            $path ='/uploads/zipFiles/'.$zipFileName;
-
-            $findDesignPlan->sourceFile=$path;
+            $findDesignPlan->designTitle=$requestData['designTitle'];
+            $findDesignPlan->image=$ImageFilestoreAs;
+            $findDesignPlan->sourceFile=$ZipFilestoreAs;
             $check=$findDesignPlan->save();
             }
+           
             $allDesignLibrary = designLibrary::all();
-            return $allDesignLibrary && $check ? response()->json(["message"=>"successfully updated",'data'=>$allDesignLibrary], 200) : response()->json("Empty Design Library", 400);
+            return $allDesignLibrary && $check ? response()->json(["message"=>"successfully updated",'data'=>$allDesignLibrary], 200) : response()->json([ $message="Empty Design Library",$data=$allDesignLibrary||Null], 400);
+
         } catch (\Throwable $th) {
           return response()->json(['error'=>$th],401);
         }

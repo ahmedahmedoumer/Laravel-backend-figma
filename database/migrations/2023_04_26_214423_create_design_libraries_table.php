@@ -13,16 +13,10 @@ return new class extends Migration
     {
         Schema::create('design_libraries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('designer_id')->nullable();
-            $table->unsignedBigInteger('brands_id')->nullable();
             $table->string('designTitle')->nullable();
             $table->string('image')->nullable();
             $table->string('sourceFile')->nullable();
             $table->string('status')->nullable();
-            $table->string('approved_by')->nullable();
-            $table->dateTime('approved_on')->nullable();
-            $table->foreign('designer_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('brands_id')->references('id')->on('brands')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

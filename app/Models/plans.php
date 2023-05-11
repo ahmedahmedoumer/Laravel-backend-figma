@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class plans extends Model
 {
     use HasFactory;
+    protected $fillable=['textOnPost','caption','hashTag'];
 }

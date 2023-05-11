@@ -22,12 +22,9 @@ class designLibraryFactory extends Factory
      */
     public function definition(): array
     {  
-         $user_id=User::where('title','designner')->pluck('id')->toArray();
-         $brand_id=planLibrary::pluck('brands_id')->toArray();
+      
         return [
             //
-            'designer_id' => $this->faker->randomElement($user_id),
-            'brands_id' => $this->faker->randomElement($brand_id),
             'designTitle' => $this->faker->unique()->sentence(),
             'image' => $this->faker->imageUrl(640, 400),
             'sourceFile' => 'public/storage/File',

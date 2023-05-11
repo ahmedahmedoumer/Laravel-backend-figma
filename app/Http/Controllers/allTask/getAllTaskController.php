@@ -13,7 +13,7 @@ class getAllTaskController extends Controller
     //
     public function getAllTask(){
      try {
-        $fetchAllTask=brands::with('designLibrary', 'brandsCompany')->get();
+        $fetchAllTask=brands::with('designs','brandsCompany')->get();
         return response()->json($fetchAllTask, 200);
         } catch (\Throwable $th) {
             return response()->json(['error'=>$th], 401);

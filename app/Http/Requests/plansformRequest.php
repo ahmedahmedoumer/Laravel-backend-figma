@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 
-class addDesignFormRequest extends FormRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class plansformRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +22,10 @@ class addDesignFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'designTitle'=>'required',
-            'image'=>'required|image ',
-            'sourceFile' => [
-                'required',
-                'file',
-                function ($attribute, $value, $fail) {
-                    $zip = new \ZipArchive();
-                    if ($zip->open($value) !== true) {
-                        $fail('Invalid zip file.');
-                    }
-                    $zip->close();
-                }
-            ],
+            //
+            'textOnPost'=>'required',
+            'caption'=>'required',
+            'hashTag'=>'required'
         ];
     }
     protected function failedValidation(Validator $validator)
