@@ -20,7 +20,7 @@ return new class extends Migration
             $table->longText('hashTag')->nullable();
             $table->string('status')->nullable();
             $table->string('approved_by')->nullable();
-            $table->string('approved_on')->nullable();
+            $table->date('approved_on')->nullable();
             $table->foreign('planner')->references('id')->on('users');
             $table->foreign('brands_id')->references('id')->on('brands');
             $table->timestamps();

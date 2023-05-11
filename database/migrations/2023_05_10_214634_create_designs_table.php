@@ -18,7 +18,7 @@ return new class extends Migration
             $table->longText('textOnPost')->nullable();
             $table->string('status')->nullable();
             $table->string('approved_by')->nullable();
-            $table->string('approved_on')->nullable();
+            $table->date('approved_on')->nullable();
             $table->foreign('brands_id')->references('id')->on('users');
             $table->foreign('designner')->references('id')->on('brands');
             $table->timestamps();
