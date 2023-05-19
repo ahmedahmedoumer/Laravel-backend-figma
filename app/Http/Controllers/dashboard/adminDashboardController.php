@@ -43,6 +43,10 @@ class adminDashboardController extends Controller
                 return response()->json(['error'=>$th],401);
             }
     }
+    public function UpdateDataCheckValidation(adminProfileUpdateRequest $request){
+        $userData = $request->only(['firstName', 'lastName', 'email', 'phone', 'title', 'status',  'password', 'confirmPassword']);
+          return response()->json($userData, 200);
+    }
 
     public function fetchAllDashboardData()
     {

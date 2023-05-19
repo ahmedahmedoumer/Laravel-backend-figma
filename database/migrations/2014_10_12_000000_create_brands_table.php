@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('phone')->nullable();
             $table->string('location')->nullable();
+            $table->string('img')->nullable();
             $table->string('title')->nullable();
             $table->string('whatsapp')->nullable();
             $table->string('creationStatus')->nullable();

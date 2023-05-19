@@ -30,10 +30,10 @@ class adminProfileUpdateRequest extends FormRequest
     {    
         $userId=Auth::id();
         return [
-            'firstName'=>'required|alpha|min:4|max:20',
-            'lastName'=>'required|alpha|min:4|max:20',
+            'firstName'=>'required|min:4|max:50',
+            'lastName'=>'required|min:4|max:50',
             'email'=>[ 'required','email', Rule::unique('users','email')->ignore($userId) ],
-            'phone'=>'required|phone:+251',
+            'phone'=>'required',
             'title'=>'required',
             'status'=>'required',
             'password'=>'required|min:8|max:50',

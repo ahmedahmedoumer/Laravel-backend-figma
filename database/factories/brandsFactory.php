@@ -30,6 +30,7 @@ class brandsFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'location' => $this->faker->text($maxNbChars = 10),
             'title' => $this->faker->unique()->sentence($maxNbChars = 10),
+            'img'=>'..\assets\users\user1.png',
             'creationStatus' => $this->faker->text($maxNbChars = 6),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),

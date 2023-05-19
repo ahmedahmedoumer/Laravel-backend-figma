@@ -29,20 +29,20 @@ use App\Http\Controllers\allTask\getAllTaskController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 //all login and dashbord page end points are here
 Route::post('/login', [loginController::class, 'adminLogin']);
 
-
+Route::post('/UpdatecheckValidation',[adminDashboardController::class, 'UpdateDataCheckValidation'])->middleware('auth:sanctum');
 Route::post('/update-profile',[adminDashboardController::class, 'adminProfileUpdateRequest'])->middleware('auth:sanctum');
 Route::get('/dashboard',[adminDashboardController::class,'fetchAllDashboardData'])->middleware('auth:sanctum')->middleware('auth:sanctum');
 
 
 
-Route::post('/logout', [loginController::class, 'logoutUser'])->middleware('auth:sanctum');;
+Route::get('/logout', [loginController::class, 'logoutUser'])->middleware('auth:sanctum');;
 Route::get('/all-users',[getUsersController::class,'getAllUsers'])->middleware('auth:sanctum');;
 Route::get('/users', [getUsersController::class, 'getAllUsers'])->middleware('auth:sanctum');;
 
