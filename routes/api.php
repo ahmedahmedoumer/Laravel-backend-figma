@@ -38,13 +38,12 @@ Route::post('/login', [loginController::class, 'adminLogin']);
 
 Route::post('/UpdatecheckValidation',[adminDashboardController::class, 'UpdateDataCheckValidation'])->middleware('auth:sanctum');
 Route::post('/update-profile',[adminDashboardController::class, 'adminProfileUpdateRequest'])->middleware('auth:sanctum');
-Route::get('/dashboard',[adminDashboardController::class,'fetchAllDashboardData'])->middleware('auth:sanctum')->middleware('auth:sanctum');
+Route::get('/dashboard',[adminDashboardController::class,'fetchAllDashboardData'])->middleware('auth:sanctum');
 
 
-
-Route::get('/logout', [loginController::class, 'logoutUser'])->middleware('auth:sanctum');;
-Route::get('/all-users',[getUsersController::class,'getAllUsers'])->middleware('auth:sanctum');;
-Route::get('/users', [getUsersController::class, 'getAllUsers'])->middleware('auth:sanctum');;
+Route::get('/all-users',[getUsersController::class,'getAllUsers'])->middleware('auth:sanctum');
+Route::get('/logout', [loginController::class, 'logoutUser'])->middleware('auth:sanctum');
+Route::get('/users', [getUsersController::class, 'getAllUsers'])->middleware('auth:sanctum');
 
 
 //all team member api's are here
@@ -56,9 +55,13 @@ Route::post('/team-members/update/{id}', [getAllTeamMembersData::class, 'editTea
 Route::get('/plan-library', [PlanLibraryController::class, 'getAllPlanLibrary'])->middleware('auth:sanctum');
 Route::post('/plan-library/update-plan/{id}', [PlanLibraryController::class, 'updatePlanLibrary'])->middleware('auth:sanctum');
 Route::post('/add-planLibrary', [PlanLibraryController::class, 'addPlanLibrary'])->middleware('auth:sanctum');
+
+
 Route::post('/add-plan', [PlanLibraryController::class, 'addPlan'])->middleware('auth:sanctum');
 Route::get('/get-all-plan-library', [getAllPlanLibrary::class, 'getAllListOfPlanLibray'])->middleware('auth:sanctum');
 Route::post('/delete-plan/{id}',[PlanLibraryController::class ,'deletePlan'])->middleware('auth:sanctum');
+
+
 Route::post('/add-bulk-plan',[PlanLibraryController::class,'addbulkPlan'])->middleware('auth:sanctum');
 Route::post('/plan/approve/{id}',[PlanLibraryController::class,'planApprove'])->middleware('auth:sanctum');
 Route::post('/all-tasks/request-plan-for-need-edit/{id}',[PlanLibraryController::class, 'setStatusNeedEditForPlanRequest'])->middleware('auth:sanctum');
@@ -99,4 +102,4 @@ Route::post('/all-users/search-from-design-libraries', [searchTermController::cl
 Route::post('/all-users/search-from-all-tasks', [searchTermController::class, 'searchFromAllTasks'])->middleware('auth:sanctum');
 Route::post('/all-users/search-from-reports', [searchTermController::class, 'searchFromReports'])->middleware('auth:sanctum');
 
-// })
+// 

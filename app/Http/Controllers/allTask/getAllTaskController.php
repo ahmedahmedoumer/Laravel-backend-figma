@@ -11,11 +11,14 @@ use App\Models\brands;
 class getAllTaskController extends Controller
 {
     //
-    public function getAllTask(){
+    public function getAllTask(Request $request){
      try {
+        $page = $request->query('perPage');
+        $currentPage=$request->query('currentPage');
+
         $fetchAllTask=brands::with('brandsCompany','plans','designs')->whereHas('plans',function($query){
             $query->where('status','Approved');
-        })->get();
+        })->paginate(perPage:$page,page:$currentPage);
         return response()->json($fetchAllTask, 200);
         } catch (\Throwable $th) {
             return response()->json(['error'=>$th], 401);

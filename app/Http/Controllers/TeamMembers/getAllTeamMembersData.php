@@ -6,13 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\UserProfileUpdateServices;
 use App\Http\Requests\addTeamMemberRequest;
+use Illuminate\Http\Request;
+
+
 
 class getAllTeamMembersData extends Controller
 {
-    public function getAllTeamMember(){
+    public function getAllTeamMember(Request $request){
         try {
-       $allTeamMembers=User::paginate(6);
-       return response()->json(['data',$allTeamMembers],200);
+            $page = $request->query('perPage');
+            $currentPage=$request->query('currentPage');
+       $allTeamMembers=User::paginate(perPage:$page,page:$currentPage);
+       return response()->json($allTeamMembers,200);
         } catch (\Throwable $th) {
             return response()->json(['error'=>$th],401);
         }

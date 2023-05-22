@@ -18,15 +18,17 @@ class PlanLibraryController extends Controller
 
 
  ////////////////////////////   for plan Library page //////////////////////////////////////////////////
-public function getAllPlanLibrary()
+public function getAllPlanLibrary(Request $request)
 {
         try {
-             $allPlanLibrary=planLibrary::paginate(4);
+            $page = $request->query('perPage');
+            $currentPage=$request->query('currentPage');
+             $allPlanLibrary=planLibrary::paginate(perPage:$page,page:$currentPage);
             if ($allPlanLibrary) {
-            return response()->json(['data'=>$allPlanLibrary],200);
+            return response()->json($allPlanLibrary,200);
             }
             $allPlanLibrary=Null;
-              return response()->json(['data'=>$allPlanLibrary,'message'=>"Empty plan Library"],200);
+              return response()->json($allPlanLibrary,200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }

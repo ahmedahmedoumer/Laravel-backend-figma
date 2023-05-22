@@ -15,10 +15,13 @@ use League\Csv\Reader;
 class DesignLibraryController extends Controller
 {
     /////////////////////////    for all design Library Page   ////////////////////////////////////////////////////////////////
-    public function getAllDesignLibrary()
+    public function getAllDesignLibrary(Request $request)
     {
         try {
-        $allDesignLibrary=designLibrary::all();
+            $page = $request->query('perPage');
+            $currentPage=$request->query('currentPage');
+
+        $allDesignLibrary=designLibrary::paginate(perPage:$page,page:$currentPage);;
         return $allDesignLibrary ? response()->json($allDesignLibrary, 200) : response()->json("Empty Design Library", 400);
         } catch (\Throwable $th) {
             return response()->json(['error'=>$th],401);
