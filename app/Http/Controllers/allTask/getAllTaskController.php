@@ -24,11 +24,13 @@ class getAllTaskController extends Controller
             return response()->json(['error'=>$th], 401);
         }    
     }
-    public function getReports(){
+    public function getReports(Request $request){
         try {
+            $page = $request->query('perPage');
+            $currentPage=$request->query('currentPage');
               $fetchTheDesignnerAndPlannerOfUser = brands::with('brandsCompany', 'designs', 'plans')->whereHas('plans',function($query){
                 $query->where('status','Approved');
-              })->get();
+              })->paginate(perPage:$page,page:$currentPage);
               return response()->json($fetchTheDesignnerAndPlannerOfUser, 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
