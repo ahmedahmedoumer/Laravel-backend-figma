@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 
 class brandPlannerRe_assign extends Controller
 {
-public function brandPlannerReassign($brand_id,$planner_id){
+public function brandPlannerReassign(Request $request){
     try{
+        $brand_id=$request->query('userID');
+        $planner_id=$request->query('assignedValue');
         $findBrandRow=brands::find($brand_id);
         $findPlanner=User::where('id',$planner_id)->where('title','planner')->first();
         if($findBrandRow && $findPlanner){

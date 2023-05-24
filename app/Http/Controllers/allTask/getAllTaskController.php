@@ -28,7 +28,7 @@ class getAllTaskController extends Controller
         try {
             $page = $request->query('perPage');
             $currentPage=$request->query('currentPage');
-              $fetchTheDesignnerAndPlannerOfUser = brands::with('brandsCompany', 'designs', 'plans')->whereHas('plans',function($query){
+              $fetchTheDesignnerAndPlannerOfUser = brands::with('brandsCompany', 'designs', 'plans','planner','designer')->whereHas('plans',function($query){
                 $query->where('status','Approved');
               })->paginate(perPage:$page,page:$currentPage);
               return response()->json($fetchTheDesignnerAndPlannerOfUser, 200);

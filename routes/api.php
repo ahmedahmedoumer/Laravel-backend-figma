@@ -69,8 +69,8 @@ Route::post('/all-tasks/request-plan-for-need-edit/{id}',[PlanLibraryController:
 
 
 //all user's page api's are here
-Route::post('/users/planner/re-assigned/{brand_id}/{planner_id}',[brandPlannerRe_assign::class,'brandPlannerReassign'])->middleware('auth:sanctum');
-Route::post('/users/designer/re-assigned/{brand_id}/{designer_id}', [brandDesignerRe_assign::class, 'brandDesignerReassign'])->middleware('auth:sanctum');
+Route::get('/users/planner/re-assigned',[brandPlannerRe_assign::class,'brandPlannerReassign'])->middleware('auth:sanctum');
+Route::post('/users/designer/re-assigned', [brandDesignerRe_assign::class, 'brandDesignerReassign'])->middleware('auth:sanctum');
 Route::post('/users/{id}/design-guide',[updateDesignGuide::class,'updateDesignGuide'])->middleware('auth:sanctum');
 
 
