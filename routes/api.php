@@ -49,7 +49,7 @@ Route::get('/users', [getUsersController::class, 'getAllUsers'])->middleware('au
 //all team member api's are here
 Route::get('/all-team-members',[getAllTeamMembersData::class, 'getAllTeamMember'])->middleware('auth:sanctum');
 Route::post('/team-members/add', [getAllTeamMembersData::class, 'addTeamMember'])->middleware('auth:sanctum');
-Route::post('/team-members/update/{id}', [getAllTeamMembersData::class, 'editTeamMemberData'])->middleware('auth:sanctum');
+Route::post('/team-members/update', [getAllTeamMembersData::class, 'editTeamMemberData'])->middleware('auth:sanctum');
 
 //all plan category api's are here
 Route::get('/plan-library', [PlanLibraryController::class, 'getAllPlanLibrary'])->middleware('auth:sanctum');

@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 
 
@@ -26,9 +27,9 @@ class adminProfileUpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules(Request $request): array
     {    
-        $userId=Auth::id();
+        $userId=$request->query('updateId');
         return [
             'firstName'=>'required|min:4|max:50',
             'lastName'=>'required|min:4|max:50',
