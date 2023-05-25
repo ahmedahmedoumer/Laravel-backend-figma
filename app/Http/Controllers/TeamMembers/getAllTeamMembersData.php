@@ -23,7 +23,7 @@ class getAllTeamMembersData extends Controller
             return response()->json(['error'=>$th],401);
         }
     }
-    public function addTeamMember(addTeamMemberRequest $request){
+    public function addTeamMember(Request $request){
         try {
         $allRequestedData=$request->only('firstName','lastName','email','phone','title','status','password');
         $services=new UserProfileUpdateServices();
