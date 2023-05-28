@@ -53,7 +53,7 @@ Route::post('/team-members/update', [getAllTeamMembersData::class, 'editTeamMemb
 
 //all plan category api's are here
 Route::get('/plan-library', [PlanLibraryController::class, 'getAllPlanLibrary'])->middleware('auth:sanctum');
-Route::post('/plan-library/update-plan/{id}', [PlanLibraryController::class, 'updatePlanLibrary'])->middleware('auth:sanctum');
+Route::post('/plan-library/update-plan', [PlanLibraryController::class, 'updatePlanLibrary'])->middleware('auth:sanctum');
 Route::post('/add-planLibrary', [PlanLibraryController::class, 'addPlanLibrary'])->middleware('auth:sanctum');
 
 

@@ -36,30 +36,30 @@ public function getAllPlanLibrary(Request $request)
 public function addPlanLibrary(planFormRequest $request)
     {
         try {
-            $planRequest = $request->only('planTitle', 'planDescription', 'planPrompt');
+            $planRequest = $request->only('data.title', 'data.description', 'data.prompt');
             $createPlan = planLibrary::create([
-                'planTitle' => $planRequest['planTitle'],
-                'planDescription' => $planRequest['planDescription'],
-                'planPrompt' => $planRequest['planPrompt']
+                'planTitle' => $planRequest['data']['title'],
+                'planDescription' => $planRequest['data']['description'],
+                'planPrompt' => $planRequest['data']['prompt']
             ]);
-            return $createPlan ? response()->json(planLibrary::all(), 200) : response()->json('Failed to register plan ', 400);
+            return $createPlan ? response()->json(planLibrary::paginate(perPage:4), 200) : response()->json('Failed to register plan ', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
    }
-public function updatePlanLibrary(planFormRequest $request, $id)
+public function updatePlanLibrary(planFormRequest $request)
     {
         try {
-            $planRequest = $request->only('planTitle', 'planDescription', 'planPrompt');
-            $findPlan = planLibrary::findOrFail($id);
+            $planRequest = $request->only('data.id','data.title', 'data.description', 'data.prompt');
+            $findPlan = planLibrary::findOrFail($planRequest['data']['id']);
             $chec = null;
             if ($findPlan) {
-                $findPlan->planTitle = $planRequest['planTitle'];
-                $findPlan->planDescription = $planRequest['planDescription'];
-                $findPlan->planPrompt = $planRequest['planPrompt'];
+                $findPlan->planTitle = $planRequest['data']['title'];
+                $findPlan->planDescription = $planRequest['data']['description'];
+                $findPlan->planPrompt = $planRequest['data']['prompt'];
                 $check = $findPlan->save();
             }
-            return $check ? response()->json(planLibrary::all(), 200) : response()->json('Failed to update plan ', 400);
+            return $check ? response()->json(planLibrary::paginate(perPage:4), 200) : response()->json('Failed to update plan ', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }

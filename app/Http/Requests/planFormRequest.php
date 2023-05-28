@@ -25,9 +25,9 @@ class planFormRequest extends FormRequest
     {
         https://meet.google.com/qaz-edyq-ycx
         return [
-            'planTitle'=>'required',
-            'planDescription'=>'required',
-            'planPrompt'=>'required'
+            'data.title'=>'required',
+            'data.description'=>'required',
+            'data.prompt'=>'required'
         ];
     }
   protected function failedValidation(Validator $validator)
