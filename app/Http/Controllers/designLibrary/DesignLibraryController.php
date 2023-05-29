@@ -53,7 +53,7 @@ class DesignLibraryController extends Controller
             return response()->json(['error'=>$th],401);
         }
     }
-    public function updateDesignLibrary(addDesignFormRequest $request,$id){
+    public function updateDesignLibrary(addDesignFormRequest $request){
         try {
             $requestData=$request->only('designTitle','image','sourceFile');
             $zipFileName=$request->file('sourceFile');

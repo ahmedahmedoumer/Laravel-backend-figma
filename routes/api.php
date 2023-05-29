@@ -78,7 +78,7 @@ Route::post('/users/{id}/design-guide',[updateDesignGuide::class,'updateDesignGu
 // all design category api's are here
 Route::get('/design-library',[DesignLibraryController::class,'getAllDesignLibrary'])->middleware('auth:sanctum');
 Route::post('/add-design',[DesignLibraryController::class,'addDesignLibrary'])->middleware('auth:sanctum');
-Route::post('/update-design/{id}',[DesignLibraryController::class,'updateDesignLibrary'])->middleware('auth:sanctum');
+Route::post('/update-design',[DesignLibraryController::class,'updateDesignLibrary'])->middleware('auth:sanctum');
 
 
 // all all tasks and reports page api's are here
