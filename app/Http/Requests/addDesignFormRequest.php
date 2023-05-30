@@ -25,18 +25,12 @@ class addDesignFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'designTitle'=>'required',
-            'image'=>'required|image ',
+            'designTitle'=>['required'],
+            'image'=>['required','image'],
             'sourceFile' => [
                 'required',
                 'file',
-                function ($attribute, $value, $fail) {
-                    $zip = new \ZipArchive();
-                    if ($zip->open($value) !== true) {
-                        $fail('Invalid zip file.');
-                    }
-                    $zip->close();
-                }
+                'mimetypes:application/zip'
             ],
         ];
     }

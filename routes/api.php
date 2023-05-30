@@ -76,10 +76,11 @@ Route::post('/users/{id}/design-guide',[updateDesignGuide::class,'updateDesignGu
 
 
 // all design category api's are here
+Route::get('/get-designs',[DesignLibraryController::class,'getDesignForSingleUser'])->middleware('auth:sanctum');
 Route::get('/design-library',[DesignLibraryController::class,'getAllDesignLibrary'])->middleware('auth:sanctum');
 Route::post('/add-design',[DesignLibraryController::class,'addDesignLibrary'])->middleware('auth:sanctum');
 Route::post('/update-design',[DesignLibraryController::class,'updateDesignLibrary'])->middleware('auth:sanctum');
-
+Route::post('/delete-design',[DesignLibraryController::class,'deleteDesign'])->middleware('auth:sanctum');
 
 // all all tasks and reports page api's are here
 Route::post('/all-tasks/delete-design-request/{id}', [DesignLibraryController::class, 'deleteDesignRequest'])->middleware('auth:sanctum');

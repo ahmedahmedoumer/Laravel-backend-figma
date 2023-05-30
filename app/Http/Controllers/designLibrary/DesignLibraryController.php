@@ -42,7 +42,6 @@ class DesignLibraryController extends Controller
 
         $ZipFilestoreAs='/uploads/zipFiles/'. $zipFileOriginalName;
         $ImageFilestoreAs = '/uploads/imageFiles/' . $imageFileOriginalName;
-
         $addDesignLibrary=designLibrary::create([
             'designTitle'=> $requestData['designTitle'],
             'image'=> $ImageFilestoreAs,
@@ -138,6 +137,20 @@ class DesignLibraryController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
+    }
+    public function getDesignForSingleUser(Request $request){
+        $userId=$request->query('userId');
+        $currentPage=$request->query('currentPage');
+        $designs=designs::where('brands_id',$userId)->paginate(perPage:10,page:$currentPage);
+        return  $designs? response()->json($designs, 200):response()->json("empty design", 401);
+    }
+
+    public function deleteDesign(Request $request){
+        return "ahmedin";
+        $designId=$request->query('designId');
+        $design=designs::findOrfail($designId);
+        $design->delete();
+        return  $design? response()->json(200):response()->json(401);
     }
 
     
