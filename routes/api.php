@@ -80,14 +80,15 @@ Route::get('/get-designs',[DesignLibraryController::class,'getDesignForSingleUse
 Route::get('/design-library',[DesignLibraryController::class,'getAllDesignLibrary'])->middleware('auth:sanctum');
 Route::post('/add-design',[DesignLibraryController::class,'addDesignLibrary'])->middleware('auth:sanctum');
 Route::post('/update-design',[DesignLibraryController::class,'updateDesignLibrary'])->middleware('auth:sanctum');
-Route::post('/delete-design',[DesignLibraryController::class,'deleteDesign'])->middleware('auth:sanctum');
+Route::get('/delete-design',[DesignLibraryController::class,'deleteDesign'])->middleware('auth:sanctum');
 
 // all all tasks and reports page api's are here
 Route::post('/all-tasks/delete-design-request/{id}', [DesignLibraryController::class, 'deleteDesignRequest'])->middleware('auth:sanctum');
 Route::post('all-tasks/add-bulk-design',[DesignLibraryController::class,'addbulkDesign'])->middleware('auth:sanctum');
+route::post('/add-design-plan',[DesignLibraryController::class,'addDesignPlan'])->middleware('auth:sanctum');
 
-Route::post('/all-tasks/approve-design-request/{id}', [DesignLibraryController::class, 'approveDesignRequest'])->middleware('auth:sanctum');
-Route::post('/all-tasks/request-design-for-need-edit/{id}', [DesignLibraryController::class, 'setStatusNeedEditForDesignRequest'])->middleware('auth:sanctum');
+Route::get('/all-tasks/approve-design-request', [DesignLibraryController::class, 'approveDesignRequest'])->middleware('auth:sanctum');
+Route::get('/all-tasks/request-design-for-need-edit', [DesignLibraryController::class, 'setStatusNeedEditForDesignRequest'])->middleware('auth:sanctum');
 
 Route::get('/all-tasks',[getAllTaskController::class,'getAllTask'])->middleware('auth:sanctum');
 Route::get('/reports',[getAllTaskController::class,'getReports'])->middleware('auth:sanctum');

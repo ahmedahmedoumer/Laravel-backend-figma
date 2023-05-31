@@ -8,6 +8,7 @@ use App\Models\designLibrary;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\addDesignFormRequest;
 use App\Models\designs;
+use App\Models\brands;
 use Illuminate\Support\Facades\Auth;
 use League\Csv\Reader;
 
@@ -93,20 +94,28 @@ class DesignLibraryController extends Controller
                  return response()->json(['error' => $th], 401);
              }
     }
-    public function approveDesignRequest($id){
+    public function approveDesignRequest(Request $request){
+        $userId=$request->query('userId');
         try {
-             $findDesigns = designs::where('brands_id',$id);
-             $findDesigns->status = "Approve";
-             $findDesigns->approved_by=Auth::id();
-             $findDesigns->approved_on=now();
-            return $findDesigns->save() ? response()->json(['message'=>"successfully approved",'data'=> designs::paginate(4)], 200) : response()->json(['message' => "Failed to  approved", 'data' => designs::paginate(4)], 401);
+            $findDesigns=designs::where('brands_id',$userId);
+            $findDesigns=$findDesigns->update([
+                'status' => 'Approve',
+                'approved_by' => Auth::id(),
+                'approved_on' => now(),
+            ]);
+            return $findDesigns
+                       ?response()->json(['message'=>"successfully approved",'data'=> designs::paginate(4)], 200) 
+                       :response()->json(['message' => "Failed to  approved", 'data' => designs::paginate(4)], 401);
         } catch (\Throwable $th) {
             return response()->json(['error'=>$th],401);
         }
     }
-    public function setStatusNeedEditForDesignRequest($id){
+    public function setStatusNeedEditForDesignRequest(Request $request)
+    {
+
+            $userId=$request->query('userId');
           try{
-                $findUserDesign=designs::where('brands_id',$id)->update('status','Need Edit');
+                $findUserDesign=designs::where('brands_id',$userId)->update(['status'=>'Need Edit']);
                 return $findUserDesign ? response()->json('successfully update Status', 200):response()->json('Failed to update Status', 401);
            } catch (\Throwable $th) {
              return response()->json('Something Wrong',401);
@@ -116,22 +125,22 @@ class DesignLibraryController extends Controller
     {
         try {
         $request->validate([
-         'zipFile' => 'required',
+         'zipFile' => 'required|mimes:csv',
+         'userId'=>'required',
         ]);
+        // if($request->hasFile('zipFile')){
+        //     return "ahmedin";
+        // }
         $csvFile= Reader::createFromPath($request->file('zipFile')->getRealPath());
         $csvFile->setHeaderOffset(0);
-       
+        $drowData=null;
         foreach ($csvFile as $row) {
-            $validator = Validator::make($row, [
-                 'textOnPost' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-            $designs=new designs();
-            $designs->textOnPost=$row['textOnPost'];
-            $checkCreated=$designs->save();
+            $drowData=$row['textOnPost'];
+            // $designs=new designs();
+            // $designs->textOnPost=$row['textOnPost'];
+            // $checkCreated=$designs->save();
         }
+        return $drowData;
            return $checkCreated ? response()->json('Successefully created',200): response()->json('Failed to Add bulk design', 401);
            
         } catch (\Throwable $th) {
@@ -146,11 +155,25 @@ class DesignLibraryController extends Controller
     }
 
     public function deleteDesign(Request $request){
-        return "ahmedin";
         $designId=$request->query('designId');
         $design=designs::findOrfail($designId);
+        $designUserId=$design->brands_id;
         $design->delete();
-        return  $design? response()->json(200):response()->json(401);
+        $designs=designs::where('brands_id',$designUserId)->paginate(perPage:10,page:1);
+        return  $designs? response()->json($designs,200):response()->json(401);
+    }
+    public function addDesignPlan(Request $request){
+        $userId=$request->query('userId');
+          $request->validate([
+               'textOnPost'=>'required',
+          ]);
+          $textOnPost=$request->textOnPost;
+          $design=new designs();
+          $design->textOnPost=$textOnPost;
+          $design->brands_id=$userId;
+          $design->save();
+          $designs=designs::where('brands_id',$userId)->paginate(perPage:10,page:1);
+          return  $designs? response()->json($designs,200):response()->json(401);
     }
 
     
