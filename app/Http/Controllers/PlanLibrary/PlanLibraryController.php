@@ -9,6 +9,7 @@ use App\Http\Requests\plansformRequest;
 use App\Models\planLibrary;
 use Illuminate\Http\Request;
 use App\Models\plans;
+use App\Models\brands;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -142,6 +143,18 @@ public function deletePlan($id)
         }
 }
 
+public function getAllListOfPlan(Request $request){
+    try {
+    $planner=$request->query('plannerId');
+    $userId=$request->query('userId');
+    $user=brands::with('brandsCompany','plans')->where('id',$userId)->paginate(perPage:5,page:1);
+    return $user?
+                 response()->json($user, 200)
+                 :response()->json('', 200);
+    } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 401);
+    }
+}
     
    
 
