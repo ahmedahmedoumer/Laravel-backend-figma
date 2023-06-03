@@ -11,8 +11,8 @@ class plans extends Model
     use HasFactory;
     protected $fillable=['textOnPost','caption','hashTag'];
     
-    public  function User()
+    public function planner()
     {
-        return $this->belongsTo(User::class,'brands_id','id');
+        return $this->belongsTo(User::class, 'planner','id');
     }
 }

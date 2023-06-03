@@ -58,7 +58,8 @@ Route::post('/add-planLibrary', [PlanLibraryController::class, 'addPlanLibrary']
 
 
 Route::post('/add-plan', [PlanLibraryController::class, 'addPlan'])->middleware('auth:sanctum');
-Route::get('/get-all-plan', [PlanLibraryController::class, 'getAllListOfPlan'])->middleware('auth:sanctum');
+Route::get('/getSingleuser', [PlanLibraryController::class, 'getPlanUser'])->middleware('auth:sanctum');
+Route::get('/getAllListOfplans',[PlanLibraryController::class, 'getallPlansForSingleUser'])->middleware('auth:sanctum');
 Route::post('/delete-plan/{id}',[PlanLibraryController::class ,'deletePlan'])->middleware('auth:sanctum');
 
 

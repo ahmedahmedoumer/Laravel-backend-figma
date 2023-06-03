@@ -143,17 +143,25 @@ public function deletePlan($id)
         }
 }
 
-public function getAllListOfPlan(Request $request){
+public function getPlanUser(Request $request){
     try {
-    $planner=$request->query('plannerId');
+    // $planner=$request->query('plannerId');
     $userId=$request->query('userId');
-    $user=brands::with('brandsCompany','plans')->where('id',$userId)->paginate(perPage:5,page:1);
+    $user=brands::with('brandsCompany')->where('id',$userId)->first();
     return $user?
                  response()->json($user, 200)
-                 :response()->json('', 200);
+                 :response()->json('', 401);
     } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
     }
+}
+public function getallPlansForSingleUser(Request $request){
+     $userId=$request->query('userId');
+     $planner=$request->query('planId');
+     $plans=plans::with('planner')->where('planner',$userId)->whereHas('planner',function($query) use ($planner){
+        $query->where('id',$planner);
+     })->paginate(perPage:4);
+     return $plans;
 }
     
    
