@@ -69,8 +69,9 @@ public function updatePlanLibrary(planFormRequest $request)
 public function addPlan(plansformRequest $request)
 {
         try {
-            $planRequest = $request->only('textOnPost', 'caption', 'hashTag');
+            $planRequest = $request->only('id','textOnPost', 'caption', 'hashTag');
             $createPlan = plans::create([
+                'brands_id'=>$planRequest['id'],
                 'textOnPost' => $planRequest['textOnPost'],
                 'caption' => $planRequest['caption'],
                 'hashTag' => $planRequest['hashTag']
@@ -82,62 +83,70 @@ public function addPlan(plansformRequest $request)
 }
 public function addbulkPlan(Request $request)
     {
+
         try {
             $request->validate([
-                'zipFile' => 'required|mimes:xlsx,xls,csv'
+             'zipFile' => 'required|mimes:csv',
+             'userId'=>'required',
             ]);
-            $csvFile = Reader::createFromPath($request->file('zipFile')->getRealPath());
+            return $request->zipFile;
+            $csvFile= Reader::createFromPath($request->file('zipFile')->getRealPath());
             $csvFile->setHeaderOffset(0);
-
+            $drowData=null;
             foreach ($csvFile as $row) {
-                $validator = Validator::make($row, [
-                    'textOnPost' => 'required',
-                    'caption' => 'required',
-                    'hashTag' => 'required',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
-                }
                 $plans = new plans();
+                $plans->brands_id=$request->userId;
                 $plans->textOnPost = $row['textOnPost'];
                 $plans->planDescription = $row['caption'];
                 $plans->planPrompt = $row['hashTag'];
                 $checkCreated = $plans->save();
             }
+           
             return $checkCreated ? response()->json('Successefully created', 200) : response()->json('Failed to Add bulk plan', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
     }
-public function setStatusNeedEditForPlanRequest($id)
+public function setStatusNeedEditForPlanRequest(Request $request)
     {
+        $userId=$request->query('userID');
         try {
-            $findUserPlan = plans::where('brands_id', $id)->update('status', 'Need Edit');
-            return $findUserPlan ? response()->json('successfully update Status', 200) : response()->json('Failed to update Status', 200);
+            $findUserPlan = plans::where('brands_id', $userId)
+                                  ->update(['status'=>'Need Edit']);
+            return $findUserPlan 
+                               ? response()->json('successfully update Status', 200) 
+                               : response()->json('Failed to update Status', 200);
         } catch (\Throwable $th) {
             return response()->json('Something Wrong',401);
         }
     }
-public function planApprove($id)
+public function planApprove(Request $request)
     {
+        $userId=$request->query('userID');
         try {
-            DB::beginTransaction();
-            $findPLanLibrary = plans::findOrFail($id);
-            $findPLanLibrary->status = "Approve";
-            $findPLanLibrary->approved_on = now();
-            $findPLanLibrary->approved_by = Auth::id();
-            $findPLanLibrary->save() ? DB::commit() : DB::rollBack();
-            return response()->json(['message' => "Successfully Approved plan ", plans::paginate(4)], 200);
+            $approvePlan=plans::where('brands_id',$userId)
+                          ->update([
+                            'status'=>"approved",
+                            'approved_on'=>now(),
+                            'approved_by'=>Auth::id(),
+                          ]);
+            return $approvePlan?
+                            response()->json( plans::paginate(4), 200)
+                            :response()->json(401);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
     }
-public function deletePlan($id)
+public function deletePlan(Request $request)
 {
+    $planId=$request->query('planId');
+    return $planId;
         try {
-            $plans=plans::findOrFail($id);
+            $plans=plans::findOrFail($planId);
             $checkDelete=$plans->delete();
-            return $checkDelete ? response()->json(['Deleted successfully'],200) : response()->json(['Deleted successfully'],400);
+            return $checkDelete 
+                              ? response()->json(200) 
+                              : response()->json(401);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
@@ -158,10 +167,11 @@ public function getPlanUser(Request $request){
 public function getallPlansForSingleUser(Request $request){
      $userId=$request->query('userId');
      $planner=$request->query('planId');
-     $plans=plans::with('planner')->where('planner',$userId)->whereHas('planner',function($query) use ($planner){
-        $query->where('id',$planner);
-     })->paginate(perPage:4);
-     return $plans;
+     $plans=plans::where('brands_id',$userId)
+                ->orderBy('created_at','desc')
+                ->paginate(perPage:4);
+     return $plans ? response()->json($plans,200)
+                   : response()->json(null,401);
 }
     
    

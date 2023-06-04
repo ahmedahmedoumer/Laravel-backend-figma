@@ -57,15 +57,15 @@ Route::post('/plan-library/update-plan', [PlanLibraryController::class, 'updateP
 Route::post('/add-planLibrary', [PlanLibraryController::class, 'addPlanLibrary'])->middleware('auth:sanctum');
 
 
-Route::post('/add-plan', [PlanLibraryController::class, 'addPlan'])->middleware('auth:sanctum');
+Route::post('/addPlanRow', [PlanLibraryController::class, 'addPlan'])->middleware('auth:sanctum');
 Route::get('/getSingleuser', [PlanLibraryController::class, 'getPlanUser'])->middleware('auth:sanctum');
 Route::get('/getAllListOfplans',[PlanLibraryController::class, 'getallPlansForSingleUser'])->middleware('auth:sanctum');
-Route::post('/delete-plan/{id}',[PlanLibraryController::class ,'deletePlan'])->middleware('auth:sanctum');
+Route::delete('/deletePlan',[PlanLibraryController::class ,'deletePlan'])->middleware('auth:sanctum');
 
 
-Route::post('/add-bulk-plan',[PlanLibraryController::class,'addbulkPlan'])->middleware('auth:sanctum');
-Route::post('/plan/approve/{id}',[PlanLibraryController::class,'planApprove'])->middleware('auth:sanctum');
-Route::post('/all-tasks/request-plan-for-need-edit/{id}',[PlanLibraryController::class, 'setStatusNeedEditForPlanRequest'])->middleware('auth:sanctum');
+Route::post('all-tasks/add-bulk-plan',[PlanLibraryController::class,'addbulkPlan'])->middleware('auth:sanctum');
+Route::get('/plan/approve',[PlanLibraryController::class,'planApprove'])->middleware('auth:sanctum');
+Route::get('/all-tasks/request-plan-for-need-edit',[PlanLibraryController::class, 'setStatusNeedEditForPlanRequest'])->middleware('auth:sanctum');
 
 
 

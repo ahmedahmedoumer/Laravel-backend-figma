@@ -9,7 +9,7 @@ use App\Models\User;
 class plans extends Model
 {
     use HasFactory;
-    protected $fillable=['textOnPost','caption','hashTag'];
+    protected $fillable=['brands_id','textOnPost','caption','hashTag'];
     
     public function planner()
     {

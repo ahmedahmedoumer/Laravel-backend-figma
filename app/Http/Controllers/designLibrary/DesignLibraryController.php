@@ -136,9 +136,9 @@ class DesignLibraryController extends Controller
         $drowData=null;
         foreach ($csvFile as $row) {
             $drowData=$row['textOnPost'];
-            // $designs=new designs();
-            // $designs->textOnPost=$row['textOnPost'];
-            // $checkCreated=$designs->save();
+            $designs=new designs();
+            $designs->textOnPost=$row['textOnPost'];
+            $checkCreated=$designs->save();
         }
         return $drowData;
            return $checkCreated ? response()->json('Successefully created',200): response()->json('Failed to Add bulk design', 401);
