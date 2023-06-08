@@ -17,7 +17,7 @@ class updateDesignGuide extends Controller
              ]);
              return $request->image;
                 $image=$request->file('image')->store('public/images');
-                $findBrandRow=brands::find();
+                $findBrandRow=brands::find($id);
                 $findBrandRow->image=$image;
                 $check=$findBrandRow->save();
                 if($check){

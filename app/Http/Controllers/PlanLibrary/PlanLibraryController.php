@@ -101,7 +101,6 @@ public function addbulkPlan(Request $request)
                 $plans->planPrompt = $row['hashTag'];
                 $checkCreated = $plans->save();
             }
-           
             return $checkCreated ? response()->json('Successefully created', 200) : response()->json('Failed to Add bulk plan', 400);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
