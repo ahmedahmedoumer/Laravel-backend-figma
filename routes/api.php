@@ -14,6 +14,8 @@ use App\Http\Controllers\TeamMembers\getAllTeamMembersData;
 use App\Http\Controllers\PlanLibrary\getAllPlanLibrary;
 use App\Http\Controllers\searchTerm\searchTermController;
 use App\Http\Controllers\allTask\getAllTaskController;
+use App\Http\Controllers\storageController;
+
 
 // use App\Http\Controller\adminDashboardController;
 
@@ -105,4 +107,6 @@ Route::post('/all-users/search-from-design-libraries', [searchTermController::cl
 Route::post('/all-users/search-from-all-tasks', [searchTermController::class, 'searchFromAllTasks'])->middleware('auth:sanctum');
 Route::post('/all-users/search-from-reports', [searchTermController::class, 'searchFromReports'])->middleware('auth:sanctum');
 
+
+Route::get('/storage/{fileName}',[storageController::class,'getFile']);
 // 
