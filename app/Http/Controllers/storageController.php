@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 class storageController extends Controller
 {
     //
@@ -17,8 +18,15 @@ class storageController extends Controller
         $file = File::get($path);
         $type = File::mimeType($path);
          return response($file, 200, ['Content-Type',$type]);
-    //    $response=Response::make($file, 200);
-    //    $response->header('Content-Type',$type);
-    //    return $response;
+   }
+
+   public function downloadSourceFile(Request $request){
+    $sourceFile=$request->query('fileName');
+    $filePath=storage_path('app/public/sourceFiles/'.$sourceFile);
+    if (file_exists($filePath)) {
+        return response()->download($filePath);
+    }
+    return "hello";
+     
    }
 }

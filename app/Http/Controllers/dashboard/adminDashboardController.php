@@ -19,8 +19,8 @@ class adminDashboardController extends Controller
     public function adminDashboard()
     {   
         try{
-            $notificationReader = new notification();
-            $notificationReader = $notificationReader::where('status', 'notread')->get();
+            $notificationReader = notification::with('user')->where('status', 'new')->get();
+            return response()->json($notificationReader, 200);
         }
         catch(\Throwable $th){
          return response()->json(['error'=>$th],401);

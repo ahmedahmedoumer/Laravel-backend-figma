@@ -41,6 +41,7 @@ Route::post('/login', [loginController::class, 'adminLogin']);
 Route::post('/UpdatecheckValidation',[adminDashboardController::class, 'UpdateDataCheckValidation'])->middleware('auth:sanctum');
 Route::post('/update-profile',[adminDashboardController::class, 'adminProfileUpdateRequest'])->middleware('auth:sanctum');
 Route::get('/dashboard',[adminDashboardController::class,'fetchAllDashboardData'])->middleware('auth:sanctum');
+Route::get('/showNotification',[adminDashboardController::class,'adminDashboard'])->middleware('auth:sanctum');
 
 
 Route::get('/all-users',[getUsersController::class,'getAllUsers'])->middleware('auth:sanctum');
@@ -109,4 +110,5 @@ Route::post('/all-users/search-from-reports', [searchTermController::class, 'sea
 
 
 Route::get('/storage/{fileName}',[storageController::class,'getFile']);
+Route::get('/downloadFile',[storageController::class,'downloadSourceFile']);
 // 

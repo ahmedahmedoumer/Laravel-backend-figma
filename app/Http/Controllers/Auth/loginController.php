@@ -24,7 +24,7 @@ class loginController extends Controller
              $data = "your credential are not match please try again !!";
              return response()->json($data, 401);
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json($th, 401);
         }  
     }
     public function logoutUser()

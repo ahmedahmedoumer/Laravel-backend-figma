@@ -53,35 +53,25 @@ class DesignLibraryController extends Controller
             return response()->json(['error'=>$th],401);
         }
     }
-    public function updateDesignLibrary(addDesignFormRequest $request){
-        try {
-            $requestData=$request->only('designTitle','image','sourceFile');
-            $zipFileName=$request->file('sourceFile');
-            $imageFileName=$request->file('image');
-            $imageFileOriginalName= $imageFileName->getClientOriginalName();
-            $zipFileOriginalName = $zipFileName->getClientOriginalName();
-            $storepPathForZipFile = public_path() . '/uploads/zipFiles';
-            $storepPathForImageFile = public_path() . '/uploads/imageFiles';
-            $zipFileName->move($storepPathForZipFile, $zipFileOriginalName);
-            $imageFileName->move($storepPathForImageFile, $imageFileOriginalName);
-    
-            $ZipFilestoreAs='/uploads/zipFiles/'. $zipFileOriginalName;
-            $ImageFilestoreAs = '/uploads/imageFiles/' . $imageFileOriginalName;
+    public function updateDesignLibrary(Request $request){
+        // try {
+            $id=$request->query('designId');
+            $designTitle=$request->designTitle;
 
             $findDesignPlan=designLibrary::find($id);
             $check=null;
             if($findDesignPlan){
-            $findDesignPlan->designTitle=$requestData['designTitle'];
-            $findDesignPlan->image=$ImageFilestoreAs;
-            $findDesignPlan->sourceFile=$ZipFilestoreAs;
-            $check=$findDesignPlan->save();
+                $findDesignPlan->designTitle=$designTitle;
+                $check=$findDesignPlan->save();
             }
+           
             $allDesignLibrary = designLibrary::all();
-            return $allDesignLibrary && $check ? response()->json(["message"=>"successfully updated",'data'=>$allDesignLibrary], 200) : response()->json([ $message="Empty Design Library",$data=$allDesignLibrary||Null], 400);
-
-        } catch (\Throwable $th) {
-          return response()->json(['error'=>$th],401);
-        }
+            return $allDesignLibrary && $check
+                                ? response()->json($allDesignLibrary, 200) 
+                                : response()->json($allDesignLibrary, 400);
+        // } catch (\Throwable $th) {
+        //   return response()->json(['error'=>$th],401);
+        // }
     }
     //////////////////////////////////// for report page ///////////////////////////////////////////////////////////////////
     public function deleteDesignRequest($id){
